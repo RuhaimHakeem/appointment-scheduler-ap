@@ -43,11 +43,18 @@ public class AppointmentService {
 	public List<AppointmentDetails> getAppointmentsByJobSeeker(int userId) throws ClassNotFoundException, SQLException {
 		return getAppointmentmanagerDao().getAppointmentsByJobSeeker(userId);
 	}
-//	
-//	
-//	public boolean deleteConsultant(int consultantId) throws ClassNotFoundException, SQLException {
-//		return getConsultantManagerDao().deleteConsultant(consultantId);
-//	}
+	
+	public List<AppointmentDetails> getAppointmentsByConsultant(int userId) throws ClassNotFoundException, SQLException {
+		return getAppointmentmanagerDao().getAppointmentsByConsultant(userId);
+	}	
+	
+	public boolean updateAppointment(int appointmentId) throws ClassNotFoundException, SQLException {
+		return  getAppointmentmanagerDao().updateAppointment(appointmentId);
+	}
+	
+	public boolean deleteAppointment(int appointmentId) throws ClassNotFoundException, SQLException {
+		return  getAppointmentmanagerDao().deleteAppointment(appointmentId);
+	}
 
 
 }

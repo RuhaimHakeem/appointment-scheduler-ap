@@ -39,9 +39,11 @@ public class AppointmentController extends HttpServlet {
 		if(action != null) {
 			if (action.equals("appointmentsbyJobSeeker")) {
 	            getAppointmentsByJobSeeker(request, response);
-	        } else {
-	            getAllAppointments(request, response);
-	        }
+	        } else if(action.equals("appointmentsByConsultant")) {
+	        	getAppointmentsByConsultant(request,response);
+	        } 
+		} else {
+			getAllAppointments(request, response);
 		}
 		
 		        
@@ -53,8 +55,11 @@ public class AppointmentController extends HttpServlet {
 		
 		if(action.equals("bookAppointment")) {
 			bookAppointment(request, response);
+		} else if (action.equals("deleteAppointment")) {
+			deleteAppointment(request, response);
+		} else if(action.equals("completeAppointment")) {
+			updateAppointment(request, response);
 		}
-		
 
 	}
 	
@@ -166,12 +171,99 @@ public class AppointmentController extends HttpServlet {
 			message = e.getMessage();
 		}
 		
-		request.setAttribute("jobSeekers", appointmentDetails);
+		request.setAttribute("appointments", appointmentDetails);
 		request.setAttribute("feebackMessage", message);
 		
 //		RequestDispatcher rd = request.getRequestDispatcher("superAdminViewAdmins.jsp");
 //    	rd.forward(request, response);
 
 	}
+	
+	private void getAppointmentsByConsultant(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		
+		int userId = Integer.parseInt(request.getParameter("userId")); 
+
+		List<AppointmentDetails> appointmentDetails = new ArrayList<>();
+		
+		try 
+		{
+			appointmentDetails = getAppointmentService().getAppointmentsByConsultant(userId);
+			
+			if(appointmentDetails.isEmpty()) {
+				message = "No record found";
+			}
+			for (AppointmentDetails appointment : appointmentDetails) {
+			    System.out.println("Appointment ID: " + appointment.getAppointmentId());
+			    System.out.println("Date: " + appointment.getDate());
+			    System.out.println("Time: " + appointment.getTime());
+			    System.out.println("Status: " + appointment.getStatus());
+			    System.out.println("Consultant Name: " + appointment.getConsultantName());
+			    System.out.println("Job Seeker Name: " + appointment.getJobSeekerName());
+			    System.out.println("-----------------------------------");
+			}
+
+		} 
+		catch (ClassNotFoundException | SQLException e) {
+			 message = e.getMessage();
+		}
+		
+		request.setAttribute("appointments", appointmentDetails);
+		request.setAttribute("feebackMessage", message);
+		
+//		RequestDispatcher rd = request.getRequestDispatcher("superAdminViewAdmins.jsp");
+//    	rd.forward(request, response);
+
+	}
+	
+	private void deleteAppointment(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		
+		int appointmentid = Integer.parseInt(request.getParameter("appointmentId"));
+		
+		try {
+			if(getAppointmentService().deleteAppointment(appointmentid)) {
+				message = "The appointment has been successfully deleted";
+			}
+			
+		} 
+		catch (ClassNotFoundException | SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		
+		request.setAttribute("feebackMessage", message);
+	
+		
+//		response.sendRedirect("getproduct?actiontype=all");
+
+	}
+	
+	private void updateAppointment(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+//		clearMessage();
+		
+
+		int appointmentid = Integer.parseInt(request.getParameter("appointmentId"));
+		
+		
+		try {
+			if(getAppointmentService().updateAppointment(appointmentid)) {
+				message = "The appointment has been completed!";
+			}
+			else {
+				message = "Failed to complete the appointment!";
+			}
+		} 
+		catch (ClassNotFoundException | SQLException e) {
+			message = e.getMessage();
+			System.out.println(e.getMessage());
+		}
+		
+		request.setAttribute("feebackMessage", message);
+//		RequestDispatcher rd = request.getRequestDispatcher("search-and-update.jsp");
+//		rd.forward(request, response);
+		
+	}
+	
 
 }

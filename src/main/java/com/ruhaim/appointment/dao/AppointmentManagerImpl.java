@@ -33,7 +33,6 @@ public class AppointmentManagerImpl implements AppointmentManager {
 			Connection connection = getConnection();
 	        // Fetch the jobSeekerId based on the userId
 	        int jobSeekerId = fetchJobSeekerId(connection, userId);
-	        System.out.println(jobSeekerId);
 	        
 
 	        String bookAppointmenttQuery = "INSERT INTO appointment (date, time, status, consultant_id, job_seeker_id) VALUES (?, ?, ?, ?, ?)";
@@ -94,7 +93,7 @@ public class AppointmentManagerImpl implements AppointmentManager {
 	    
 	    ResultSet rs = st.executeQuery(query);
 	    while (rs.next()) {
-	        AppointmentDetails appointmentDetails = new AppointmentDetails( rs.getInt("appointment_id"), rs.getString("date"), rs.getString("time"), rs.getString("status"), rs.getString("consultant_name"), rs.getString("job_seeker_name")); 
+	        AppointmentDetails appointmentDetails = new AppointmentDetails(rs.getInt("appointment_id"), rs.getString("date"), rs.getString("time"), rs.getString("status"), rs.getString("consultant_name"), rs.getString("job_seeker_name")); 
 	        appointmentDetailsList.add(appointmentDetails);
 	    }
 	    
@@ -124,7 +123,7 @@ public class AppointmentManagerImpl implements AppointmentManager {
 	    
 	    ResultSet rs = ps.executeQuery();
 	    while (rs.next()) {
-	        AppointmentDetails appointmentDetails = new AppointmentDetails( rs.getInt("appointment_id"), rs.getString("date"), rs.getString("time"), rs.getString("status"), rs.getString("consultant_name"), rs.getString("job_seeker_name")); 
+	        AppointmentDetails appointmentDetails = new AppointmentDetails(rs.getInt("appointment_id"), rs.getString("date"), rs.getString("time"), rs.getString("status"), rs.getString("consultant_name"), rs.getString("job_seeker_name")); 
 	        appointmentDetailsList.add(appointmentDetails);
 	    }
 	    
@@ -136,21 +135,73 @@ public class AppointmentManagerImpl implements AppointmentManager {
 	
 
 	@Override
-	public List<Appointment> getAppointmentsByConsultant(int consultantId) throws SQLException, ClassNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<AppointmentDetails> getAppointmentsByConsultant(int userId) throws SQLException, ClassNotFoundException {
+		Connection connection = getConnection();
+		
+		 int consultantId = fetchCounsultantId(connection, userId);
+	    
+		 String query = "SELECT a.*, c.name AS consultant_name, j.name AS job_seeker_name " +
+               "FROM appointment a " +
+               "JOIN consultant c ON a.consultant_id = c.consultant_id " +
+               "JOIN job_seeker j ON a.job_seeker_id = j.job_seeker_id " +
+               "WHERE a.consultant_id = ?";
+		 
+
+	    PreparedStatement ps = connection.prepareStatement(query);
+	    ps.setInt(1, consultantId);
+	    
+	    List<AppointmentDetails> appointmentDetailsList = new ArrayList<>();
+	    
+	    ResultSet rs = ps.executeQuery();
+	    while (rs.next()) {
+	        AppointmentDetails appointmentDetails = new AppointmentDetails(rs.getInt("appointment_id"), rs.getString("date"), rs.getString("time"), rs.getString("status"), rs.getString("consultant_name"), rs.getString("job_seeker_name")); 
+	        appointmentDetailsList.add(appointmentDetails);
+	    }
+	    
+	    ps.close();
+	    connection.close();
+	    
+	    return appointmentDetailsList;
 	}
 
 	@Override
 	public boolean updateAppointment(int appointmentId) throws SQLException, ClassNotFoundException {
-		// TODO Auto-generated method stub
-		return false;
+
+		Connection connection = getConnection();
+		String query = "UPDATE appointment SET status=? WHERE appointment_id=?";
+		
+		PreparedStatement ps = connection.prepareStatement(query);
+		ps.setString(1, "Completed");
+		ps.setInt(2, appointmentId);
+	
+		
+		boolean result = false;		
+		if(ps.executeUpdate() > 0)
+			result = true;
+		
+		ps.close();
+		connection.close();
+		
+		return result;
 	}
 
 	@Override
 	public boolean deleteAppointment(int appointmentId) throws SQLException, ClassNotFoundException {
-		// TODO Auto-generated method stub
-		return false;
+		Connection connection = getConnection();
+		String query = "DELETE FROM appointment WHERE appointment_id=?";
+		
+		PreparedStatement ps = connection.prepareStatement(query);
+		ps.setInt(1, appointmentId);
+		
+		boolean result = false;
+		if(ps.executeUpdate() > 0) {
+			result = true;
+		}
+		
+		ps.close();
+		connection.close();
+		
+		return result;
 	}
 	
 	 private int fetchJobSeekerId(Connection connection, int userId) throws SQLException {

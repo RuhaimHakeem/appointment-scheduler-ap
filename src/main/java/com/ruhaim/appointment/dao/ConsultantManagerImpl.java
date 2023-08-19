@@ -65,7 +65,6 @@ public class ConsultantManagerImpl implements ConsultantManager {
                 throw new SQLException("Invalid or used registration ID.");
             }
             
-            // Update the registration ID as used
             PreparedStatement updateRegIdUsedPs = connection.prepareStatement(updateRegIdUsedQuery);
             updateRegIdUsedPs.setInt(1, regId);
             updateRegIdUsedPs.executeUpdate();
