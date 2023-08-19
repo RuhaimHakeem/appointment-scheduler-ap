@@ -4,11 +4,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.ruhaim.appointment.dao.dbutils.DbDriverManager;
 import com.ruhaim.appointment.dao.dbutils.DbDriverManagerFactory;
 import com.ruhaim.appointment.model.Appointment;
+import com.ruhaim.appointment.model.AppointmentDetails;
+import com.ruhaim.appointment.model.JobSeeker;
 
 public class AppointmentManagerImpl implements AppointmentManager {
 
@@ -25,35 +29,111 @@ public class AppointmentManagerImpl implements AppointmentManager {
 	}
 
 	@Override
-	public boolean bookAppointment(Appointment appointment, int userId) throws ClassNotFoundException, SQLException {
-		 Connection connection = getConnection();
+	public boolean bookAppointment(Appointment appointment, int userId, int availabilityTimeId) throws ClassNotFoundException, SQLException {
+			Connection connection = getConnection();
+	        // Fetch the jobSeekerId based on the userId
+	        int jobSeekerId = fetchJobSeekerId(connection, userId);
+	        System.out.println(jobSeekerId);
+	        
 
+	        String bookAppointmenttQuery = "INSERT INTO appointment (date, time, status, consultant_id, job_seeker_id) VALUES (?, ?, ?, ?, ?)";
+	        String deleteAvailabilityTimeQuery = "DELETE FROM availability_time WHERE availability_time_id = ?";
+	        
+	        PreparedStatement appointmentPs = connection.prepareStatement(bookAppointmenttQuery);
+	        appointmentPs.setString(1, appointment.getDate());
+	        appointmentPs.setString(2, appointment.getTime());
+	        appointmentPs.setString(3, appointment.getStatus());
+	        appointmentPs.setInt(4, appointment.getConsultantId());
+	        appointmentPs.setInt(5, jobSeekerId);
 
-            int jobSeekerId = fetchJobSeekerId(connection, userId);
-
-            String query = "INSERT INTO appointment (date, time, status, consultant_id, job_seeker_id) VALUES (?, ?, ?, ?, ?)";
-            PreparedStatement ps = connection.prepareStatement(query);
-            ps.setString(1, appointment.getDate());
-            ps.setString(2, appointment.getTime());
-            ps.setString(3, appointment.getStatus());
-            ps.setInt(4, appointment.getConsultantId());
-            ps.setInt(5, jobSeekerId);
-            
-            return ps.executeUpdate() > 0;
+	        PreparedStatement deleteAvailabilityTimePs = connection.prepareStatement(deleteAvailabilityTimeQuery);
+	        deleteAvailabilityTimePs.setInt(1, availabilityTimeId);
+	        
+	        connection.setAutoCommit(false);
+	        
+	        try {
+	            int appointmentResult = appointmentPs.executeUpdate();
+	            if (appointmentResult > 0) {
+	                int deleteAvailabilityResult = deleteAvailabilityTimePs.executeUpdate();
+	                if (deleteAvailabilityResult > 0) {
+	                    connection.commit();
+	                    return true;
+	                } else {
+	                    connection.rollback();
+	                    return false;
+	                   
+	                }
+	            } else {
+	                connection.rollback();
+	                return false;
+	            }
+	        } catch (SQLException e) {
+	            connection.rollback();
+	            return false;
+	        } finally {
+	            connection.setAutoCommit(true);
+	            appointmentPs.close();
+	            deleteAvailabilityTimePs.close();
+	        }
+	    } 
        
+
+	@Override
+	public List<AppointmentDetails> getAllAppointments() throws SQLException, ClassNotFoundException {
+		Connection connection = getConnection();
+		
+	    
+		 String query = "SELECT a.*, c.name AS consultant_name, j.name AS job_seeker_name " +
+                 "FROM appointment a " +
+                 "JOIN consultant c ON a.consultant_id = c.consultant_id " +
+                 "JOIN job_seeker j ON a.job_seeker_id = j.job_seeker_id";
+		 
+	    Statement st = connection.createStatement();
+	    
+	    List<AppointmentDetails> appointmentDetailsList = new ArrayList<>();
+	    
+	    ResultSet rs = st.executeQuery(query);
+	    while (rs.next()) {
+	        AppointmentDetails appointmentDetails = new AppointmentDetails( rs.getInt("appointment_id"), rs.getString("date"), rs.getString("time"), rs.getString("status"), rs.getString("consultant_name"), rs.getString("job_seeker_name")); 
+	        appointmentDetailsList.add(appointmentDetails);
+	    }
+	    
+	    st.close();
+	    connection.close();
+	    
+	    return appointmentDetailsList;
 	}
 
 	@Override
-	public List<Appointment> getAllAppointments() throws SQLException, ClassNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public List<AppointmentDetails> getAppointmentsByJobSeeker(int userId) throws SQLException, ClassNotFoundException {
+		Connection connection = getConnection();
+		
+		 int jobSeekerId = fetchJobSeekerId(connection, userId);
+	    
+		 String query = "SELECT a.*, c.name AS consultant_name, j.name AS job_seeker_name " +
+                "FROM appointment a " +
+                "JOIN consultant c ON a.consultant_id = c.consultant_id " +
+                "JOIN job_seeker j ON a.job_seeker_id = j.job_seeker_id " +
+                "WHERE a.job_seeker_id = ?";
+		 
 
-	@Override
-	public List<Appointment> getAppointmentsByJobSeeker(int jobSeekerId) throws SQLException, ClassNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+	    PreparedStatement ps = connection.prepareStatement(query);
+	    ps.setInt(1, jobSeekerId);
+	    
+	    List<AppointmentDetails> appointmentDetailsList = new ArrayList<>();
+	    
+	    ResultSet rs = ps.executeQuery();
+	    while (rs.next()) {
+	        AppointmentDetails appointmentDetails = new AppointmentDetails( rs.getInt("appointment_id"), rs.getString("date"), rs.getString("time"), rs.getString("status"), rs.getString("consultant_name"), rs.getString("job_seeker_name")); 
+	        appointmentDetailsList.add(appointmentDetails);
+	    }
+	    
+	    ps.close();
+	    connection.close();
+	    
+	    return appointmentDetailsList;
 	}
+	
 
 	@Override
 	public List<Appointment> getAppointmentsByConsultant(int consultantId) throws SQLException, ClassNotFoundException {
@@ -79,12 +159,26 @@ public class AppointmentManagerImpl implements AppointmentManager {
 	            ps.setInt(1, userId);
 	            try (ResultSet rs = ps.executeQuery()) {
 	                if (rs.next()) {
-	                    return rs.getInt("jobseeker_id");
+	                    return rs.getInt("job_seeker_id");
 	                }
 	                
 	                throw new SQLException("No matching job seeker found for user ID: " + userId);
 	            }
 	        }
-	    }
+	   }
+	 
+	 private int fetchCounsultantId(Connection connection, int userId) throws SQLException {
+	        String query = "SELECT consultant_id FROM consultant WHERE user_id = ?";
+	        try (PreparedStatement ps = connection.prepareStatement(query)) {
+	            ps.setInt(1, userId);
+	            try (ResultSet rs = ps.executeQuery()) {
+	                if (rs.next()) {
+	                    return rs.getInt("consultant_id");
+	                }
+	                
+	                throw new SQLException("No matching consultant found for user ID: " + userId);
+	            }
+	        }
+	   }
 
 }

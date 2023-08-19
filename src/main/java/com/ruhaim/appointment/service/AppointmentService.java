@@ -1,8 +1,12 @@
 package com.ruhaim.appointment.service;
 import java.sql.SQLException;
+import java.util.List;
+
 import com.ruhaim.appointment.dao.AppointmentManager;
 import com.ruhaim.appointment.dao.AppointmentManagerImpl;
 import com.ruhaim.appointment.model.Appointment;
+import com.ruhaim.appointment.model.AppointmentDetails;
+
 
 
 public class AppointmentService {
@@ -28,13 +32,17 @@ public class AppointmentService {
 	
 	}
 	
-	public boolean bookAppointment(Appointment appointment, int userId) throws ClassNotFoundException, SQLException {
-		return getAppointmentmanagerDao().bookAppointment(appointment, userId);
+	public boolean bookAppointment(Appointment appointment, int userId, int availabilityTimeId) throws ClassNotFoundException, SQLException {
+		return getAppointmentmanagerDao().bookAppointment(appointment, userId, availabilityTimeId);
 	}
 	
-//	public boolean registerConsultant(Consultant consultant, int regId) throws ClassNotFoundException, SQLException {
-//		return getConsultantManagerDao().registerConsultant(consultant, regId);
-//	}
+	public List<AppointmentDetails> getAllJobSeekers() throws ClassNotFoundException, SQLException {
+		return getAppointmentmanagerDao().getAllAppointments();
+	}
+	
+	public List<AppointmentDetails> getAppointmentsByJobSeeker(int userId) throws ClassNotFoundException, SQLException {
+		return getAppointmentmanagerDao().getAppointmentsByJobSeeker(userId);
+	}
 //	
 //	
 //	public boolean deleteConsultant(int consultantId) throws ClassNotFoundException, SQLException {
