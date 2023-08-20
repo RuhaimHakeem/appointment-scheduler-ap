@@ -11,12 +11,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.ruhaim.appointment.model.Appointment;
-import com.ruhaim.appointment.model.JobSeeker;
 import com.ruhaim.appointment.service.AppointmentService;
 
-/**
- * Servlet implementation class AppointmentController
- */
+
 public class AppointmentController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
@@ -132,7 +129,7 @@ public class AppointmentController extends HttpServlet {
 			message = e.getMessage();
 		}
 		
-		request.setAttribute("jobSeekers", appointmentDetails);
+		request.setAttribute("appointments", appointmentDetails);
 		request.setAttribute("feebackMessage", message);
 		
 //		RequestDispatcher rd = request.getRequestDispatcher("superAdminViewAdmins.jsp");
@@ -256,7 +253,6 @@ public class AppointmentController extends HttpServlet {
 		} 
 		catch (ClassNotFoundException | SQLException e) {
 			message = e.getMessage();
-			System.out.println(e.getMessage());
 		}
 		
 		request.setAttribute("feebackMessage", message);

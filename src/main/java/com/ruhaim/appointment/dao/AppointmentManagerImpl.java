@@ -10,14 +10,14 @@ import java.util.List;
 
 import com.ruhaim.appointment.dao.dbutils.DbDriverManager;
 import com.ruhaim.appointment.dao.dbutils.DbDriverManagerFactory;
+import com.ruhaim.appointment.dao.helpers.Helpers;
 import com.ruhaim.appointment.model.Appointment;
 import com.ruhaim.appointment.model.AppointmentDetails;
-import com.ruhaim.appointment.model.JobSeeker;
 
 public class AppointmentManagerImpl implements AppointmentManager {
 
 	public AppointmentManagerImpl() {
-		// TODO Auto-generated constructor stub
+	
 	}
 	
 	private Connection getConnection() throws ClassNotFoundException, SQLException {
@@ -31,9 +31,8 @@ public class AppointmentManagerImpl implements AppointmentManager {
 	@Override
 	public boolean bookAppointment(Appointment appointment, int userId, int availabilityTimeId) throws ClassNotFoundException, SQLException {
 			Connection connection = getConnection();
-	        // Fetch the jobSeekerId based on the userId
-	        int jobSeekerId = fetchJobSeekerId(connection, userId);
-	        
+
+			int jobSeekerId = Helpers.fetchJobSeekerId(connection, userId);      
 
 	        String bookAppointmenttQuery = "INSERT INTO appointment (date, time, status, consultant_id, job_seeker_id) VALUES (?, ?, ?, ?, ?)";
 	        String deleteAvailabilityTimeQuery = "DELETE FROM availability_time WHERE availability_time_id = ?";
@@ -106,8 +105,9 @@ public class AppointmentManagerImpl implements AppointmentManager {
 	@Override
 	public List<AppointmentDetails> getAppointmentsByJobSeeker(int userId) throws SQLException, ClassNotFoundException {
 		Connection connection = getConnection();
-		
-		 int jobSeekerId = fetchJobSeekerId(connection, userId);
+		 
+		 int jobSeekerId = Helpers.fetchJobSeekerId(connection, userId);
+
 	    
 		 String query = "SELECT a.*, c.name AS consultant_name, j.name AS job_seeker_name " +
                 "FROM appointment a " +
@@ -137,8 +137,8 @@ public class AppointmentManagerImpl implements AppointmentManager {
 	@Override
 	public List<AppointmentDetails> getAppointmentsByConsultant(int userId) throws SQLException, ClassNotFoundException {
 		Connection connection = getConnection();
-		
-		 int consultantId = fetchCounsultantId(connection, userId);
+		 
+		 int consultantId = Helpers.fetchConsultantId(connection, userId);
 	    
 		 String query = "SELECT a.*, c.name AS consultant_name, j.name AS job_seeker_name " +
                "FROM appointment a " +
@@ -203,33 +203,5 @@ public class AppointmentManagerImpl implements AppointmentManager {
 		
 		return result;
 	}
-	
-	 private int fetchJobSeekerId(Connection connection, int userId) throws SQLException {
-	        String query = "SELECT job_seeker_id FROM job_seeker WHERE user_id = ?";
-	        try (PreparedStatement ps = connection.prepareStatement(query)) {
-	            ps.setInt(1, userId);
-	            try (ResultSet rs = ps.executeQuery()) {
-	                if (rs.next()) {
-	                    return rs.getInt("job_seeker_id");
-	                }
-	                
-	                throw new SQLException("No matching job seeker found for user ID: " + userId);
-	            }
-	        }
-	   }
-	 
-	 private int fetchCounsultantId(Connection connection, int userId) throws SQLException {
-	        String query = "SELECT consultant_id FROM consultant WHERE user_id = ?";
-	        try (PreparedStatement ps = connection.prepareStatement(query)) {
-	            ps.setInt(1, userId);
-	            try (ResultSet rs = ps.executeQuery()) {
-	                if (rs.next()) {
-	                    return rs.getInt("consultant_id");
-	                }
-	                
-	                throw new SQLException("No matching consultant found for user ID: " + userId);
-	            }
-	        }
-	   }
 
 }

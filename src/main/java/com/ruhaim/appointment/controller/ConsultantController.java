@@ -124,7 +124,6 @@ public class ConsultantController extends HttpServlet {
 				message = "The consultant has been successfully deleted";
 			}
 			
-			System.out.println("I am deleted");
 		} 
 		catch (ClassNotFoundException | SQLException e) {
 			message = "Failed to delete the consultant!";
