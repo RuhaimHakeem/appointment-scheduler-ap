@@ -44,6 +44,11 @@ public synchronized static ConsultantAvailabilityTimeService getConsultantAvaila
 		return getConsultantAvailabilityTimeDao().getAvailabiltyTimesByJobAndCountry(job, country);
 	
 	}
+	
+	public List<AvailabilityTime> getAvailabiltyTimesByConsultant(int userId) throws ClassNotFoundException, SQLException {
+		return getConsultantAvailabilityTimeDao().getAvailabiltyTimesByConsultant(userId);
+	
+	}
 
 }
 

@@ -11,9 +11,8 @@ import java.util.List;
 import com.ruhaim.appointment.dao.dbutils.DbDriverManager;
 import com.ruhaim.appointment.dao.dbutils.DbDriverManagerFactory;
 import com.ruhaim.appointment.dao.helpers.Helpers;
-import com.ruhaim.appointment.model.AppointmentDetails;
 import com.ruhaim.appointment.model.AvailabilityTime;
-import com.ruhaim.appointment.model.JobSeeker;
+
 
 public class ConsultantAvailabilityTimeManagerImpl implements ConsultantAvailabilityTimeManager {
 	
@@ -69,7 +68,8 @@ public class ConsultantAvailabilityTimeManagerImpl implements ConsultantAvailabi
 	    ResultSet rs = st.executeQuery(query);
 	    while (rs.next()) {
 	    	AvailabilityTime availabilityTime = new AvailabilityTime(); 
-
+	    	
+	    	availabilityTime.setAvailabilityTimeId(rs.getInt("availability_time_id"));
 	        availabilityTime.setName(rs.getString("consultant_name"));
 	        availabilityTime.setDate(rs.getString("date"));
 	        availabilityTime.setTime(rs.getString("time"));
@@ -129,6 +129,43 @@ public class ConsultantAvailabilityTimeManagerImpl implements ConsultantAvailabi
 	    	AvailabilityTime availabilityTime = new AvailabilityTime(); 
 
 	        availabilityTime.setName(rs.getString("consultant_name"));
+	        availabilityTime.setDate(rs.getString("date"));
+	        availabilityTime.setTime(rs.getString("time"));
+	        availabilityTime.setSpecializedJob(rs.getString("specialized_job"));
+	        availabilityTime.setSpecializedCountry(rs.getString("specialized_country"));
+	        availabilityTime.setEmail(rs.getString("email"));
+	        
+	        availabilityTimes.add(availabilityTime);
+	    }
+	    
+	    ps.close();
+	    connection.close();
+	    
+	    return availabilityTimes;
+	}
+	
+	@Override
+	public List<AvailabilityTime> getAvailabiltyTimesByConsultant(int userId) throws SQLException, ClassNotFoundException {
+		Connection connection = getConnection();
+		
+	    
+		 String query = "SELECT a.*, c.name AS consultant_name, c.specialized_job, c.specialized_country, c.email "
+		 		+ "FROM availability_time a "
+		 		+ "JOIN consultant c ON a.consultant_id = c.consultant_id "
+		 		+ "WHERE c.user_id = ?" ;
+		 
+		 
+		 PreparedStatement ps = connection.prepareStatement(query);
+		 ps.setInt(1, userId);       
+	
+	    
+	    List<AvailabilityTime> availabilityTimes = new ArrayList<>();
+	    
+	    ResultSet rs = ps.executeQuery();
+	    while (rs.next()) {
+	    	AvailabilityTime availabilityTime = new AvailabilityTime(); 
+
+//	        availabilityTime.setName(rs.getString("consultant_name"));
 	        availabilityTime.setDate(rs.getString("date"));
 	        availabilityTime.setTime(rs.getString("time"));
 	        availabilityTime.setSpecializedJob(rs.getString("specialized_job"));

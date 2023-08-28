@@ -1,6 +1,7 @@
 package com.ruhaim.appointment.service;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import com.ruhaim.appointment.dao.ConsultantManager;
 import com.ruhaim.appointment.dao.ConsultantManagerImpl;
@@ -40,6 +41,10 @@ public synchronized static ConsultantService getConsultantService() {
 	
 	public boolean deleteConsultant(int consultantId) throws ClassNotFoundException, SQLException {
 		return getConsultantManagerDao().deleteConsultant(consultantId);
+	}
+	
+	public List<Consultant> getAllConsultants() throws ClassNotFoundException, SQLException {
+		return getConsultantManagerDao().getAllConsultants();
 	}
 
 }

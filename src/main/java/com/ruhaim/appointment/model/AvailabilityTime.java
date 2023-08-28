@@ -2,6 +2,7 @@ package com.ruhaim.appointment.model;
 
 public class AvailabilityTime extends Consultant {
 	
+	private int availabilityTimeId;
 	private String date;
 	private String time;
 	private int consultantId;
@@ -11,10 +12,21 @@ public class AvailabilityTime extends Consultant {
 	}
 
 
-	public AvailabilityTime(String date, String time, int consultantId) {
+	public AvailabilityTime(int availabilityTimeId, String date, String time, int consultantId) {
 		this.date = date;
 		this.time = time;
 		this.consultantId = consultantId;
+		this.availabilityTimeId = availabilityTimeId;
+	}
+
+
+	public int getAvailabilityTimeId() {
+		return availabilityTimeId;
+	}
+
+
+	public void setAvailabilityTimeId(int availabilityTimeId) {
+		this.availabilityTimeId = availabilityTimeId;
 	}
 
 

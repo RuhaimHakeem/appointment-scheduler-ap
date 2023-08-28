@@ -47,6 +47,8 @@ public class JobSeekerController extends HttpServlet {
 	
 	private void regiserJobSeeker(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+	clearMessage();
+		
 	 String username = request.getParameter("username");
      String password = request.getParameter("password");
      String name = request.getParameter("name");
@@ -65,7 +67,6 @@ public class JobSeekerController extends HttpServlet {
     	 if(getJobSeekerService().regiserJobSeeker(jobSeeker)) {
     		 
     		message = "The Job seeker has been registered successfully!";
-    		 System.out.println("added");
 		} else {
 			message = "Failed to register the Job Seeker!";
 		}
@@ -76,13 +77,14 @@ public class JobSeekerController extends HttpServlet {
 		}
 		
 		request.setAttribute("feebackMessage", message);
-		RequestDispatcher rd = request.getRequestDispatcher("job-seeker-login.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("JobSeekerRegister.jsp");
 		rd.forward(request, response);
      
 	}
 	
 	private void getAllJobSeekers(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		clearMessage();
 
 		List<JobSeeker> jobSeekers = new ArrayList<>();
 		
@@ -109,6 +111,7 @@ public class JobSeekerController extends HttpServlet {
 	
 	private void deleteJobSeeker(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		clearMessage();
 		
 		int jobSeekerId = Integer.parseInt(request.getParameter("jobSeekerId"));
 		
@@ -130,6 +133,10 @@ public class JobSeekerController extends HttpServlet {
 		
 //		response.sendRedirect("getproduct?actiontype=all");
 
+	}
+	
+	private void clearMessage() {
+		message = "";
 	}
 
 }

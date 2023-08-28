@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.ruhaim.appointment.dao.dbutils.DbDriverManager;
 import com.ruhaim.appointment.dao.dbutils.DbDriverManagerFactory;
@@ -127,6 +129,34 @@ public class ConsultantManagerImpl implements ConsultantManager {
 		connection.close();
 		
 		return result;
+	}
+	
+	@Override
+	public List<Consultant> getAllConsultants() throws SQLException, ClassNotFoundException {
+		 Connection connection = getConnection();
+		    
+		    String query = "SELECT * FROM consultant";
+		    Statement st = connection.createStatement();
+		    
+		    List<Consultant> consultantsList = new ArrayList<>();
+		    
+		    ResultSet rs = st.executeQuery(query);
+		    while (rs.next()) {
+		        Consultant consultant = new Consultant();
+		        consultant.setConsultantId(rs.getInt("consultant_id"));
+		        consultant.setName(rs.getString("name"));
+		        consultant.setEmail(rs.getString("email"));
+		        consultant.setSpecializedJob(rs.getString("specialized_job"));
+		        consultant.setSpecializedCountry(rs.getString("specialized_country"));
+		        consultant.setUserId(rs.getInt("user_id"));
+		        
+		        consultantsList.add(consultant);
+		    }
+		    
+		    st.close();
+		    connection.close();
+		    
+		    return consultantsList;
 	}
 
 }

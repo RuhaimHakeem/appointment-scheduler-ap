@@ -10,4 +10,5 @@ public interface ConsultantAvailabilityTimeManager {
 	public List<AvailabilityTime> getAllAvailabiltyTimes() throws SQLException, ClassNotFoundException;
 	public boolean deleteAvailabilityTime(int availabilityTimeId) throws SQLException, ClassNotFoundException;
 	public List<AvailabilityTime> getAvailabiltyTimesByJobAndCountry(String job, String country) throws SQLException, ClassNotFoundException;
+	List<AvailabilityTime> getAvailabiltyTimesByConsultant(int userId) throws SQLException, ClassNotFoundException;
 }

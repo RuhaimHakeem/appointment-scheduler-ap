@@ -2,12 +2,18 @@ package com.ruhaim.appointment.controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruhaim.appointment.model.AppointmentDetails;
 import com.ruhaim.appointment.model.Consultant;
+import com.ruhaim.appointment.model.JobSeeker;
 import com.ruhaim.appointment.service.ConsultantService;
 
 
@@ -30,7 +36,7 @@ public class ConsultantController extends HttpServlet {
 
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	
+		getAllConsultants(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -49,6 +55,8 @@ public class ConsultantController extends HttpServlet {
 	}
 	
 	private void registerConsultantWithId(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		clearMessage();
 		
 		int regId = Integer.parseInt(request.getParameter("regId")); 
 	     
@@ -75,7 +83,9 @@ public class ConsultantController extends HttpServlet {
 	
 	private void registerConsultant(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		 int regId = Integer.parseInt(request.getParameter("regId")); 
+		clearMessage(); 
+		
+		int regId = Integer.parseInt(request.getParameter("regId")); 
 		 String username = request.getParameter("username");
 	     String password = request.getParameter("password");
 	     String name = request.getParameter("name");
@@ -83,6 +93,7 @@ public class ConsultantController extends HttpServlet {
 	     String specializedJob = request.getParameter("specializedJob");
 	     String specializedCountry = request.getParameter("specializedCountry");
 	     String role = "consultant";
+	     
 	     
 	     Consultant consultant = new Consultant();
 	     consultant.setUserName(username);
@@ -109,13 +120,14 @@ public class ConsultantController extends HttpServlet {
 			}
 			
 			request.setAttribute("feebackMessage", message);
-//			RequestDispatcher rd = request.getRequestDispatcher("job-seeker-login.jsp");
-//			rd.forward(request, response);
+			RequestDispatcher rd = request.getRequestDispatcher("ConsultantRegister.jsp");
+			rd.forward(request, response);
 	     
 		}
 	
 	private void deleteConsultant(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		clearMessage(); 
 		
 		int consultantId = Integer.parseInt(request.getParameter("consultantId"));
 		
@@ -134,6 +146,47 @@ public class ConsultantController extends HttpServlet {
 		
 //		response.sendRedirect("getproduct?actiontype=all");
 
+	}
+	
+	private void getAllConsultants(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		clearMessage(); 
+
+		List<Consultant> consultants = new ArrayList<>();
+		
+		try 
+		{
+			consultants = getConsultantService().getAllConsultants();
+			
+			if(consultants.isEmpty()) {
+				message = "No record found";
+			}		
+			for (Consultant consultant : consultants) {
+			    System.out.println("Consultant ID: " + consultant.getConsultantId());
+			    System.out.println("Name: " + consultant.getName());
+			    System.out.println("Email: " + consultant.getEmail());
+			    System.out.println("Specialized Job: " + consultant.getSpecializedJob());
+			    System.out.println("Specialized Country: " + consultant.getSpecializedCountry());
+			    System.out.println("User ID: " + consultant.getUserId());
+			    System.out.println("-----------------------------------");
+			}
+
+		} 
+		catch (ClassNotFoundException | SQLException e) {
+			message = e.getMessage();
+			 System.out.println(e.getMessage());
+		}
+		
+		request.setAttribute("consultants", consultants);
+		request.setAttribute("feebackMessage", message);
+		
+//		RequestDispatcher rd = request.getRequestDispatcher("superAdminViewAdmins.jsp");
+//    	rd.forward(request, response);
+
+	}
+	
+	private void clearMessage() {
+		message = "";
 	}
 	
 

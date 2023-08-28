@@ -38,7 +38,9 @@ public class ConsultantAvailabilityTimeController extends HttpServlet {
 		if(action != null) {
 			if (action.equals("filter")) {
 				getAvailabiltyTimesByJobAndCountry(request, response);
-	        } 
+	        } else if (action.equals("filterByConsultant")) {
+	        	getAvailabiltyTimesByConsultant(request,response);
+	        }
 		} else {
 			getAllAvailabiltyTimes(request, response);
 		}
@@ -97,16 +99,16 @@ public class ConsultantAvailabilityTimeController extends HttpServlet {
 			if(availabilityTimes.isEmpty()) {
 				message = "No record found";
 			}
-			
-			for (AvailabilityTime availabilityTime : availabilityTimes) {
-			    System.out.println("Availability Date: " + availabilityTime.getDate());
-			    System.out.println("Time: " + availabilityTime.getTime());
-			    System.out.println("Name: " + availabilityTime.getName());
-			    System.out.println("Country: " + availabilityTime.getSpecializedCountry());
-			    System.out.println("Job: " + availabilityTime.getSpecializedJob());
-			    System.out.println("Email: " + availabilityTime.getEmail());
-			    System.out.println("-----------------------------------");
-			}
+//			
+//			for (AvailabilityTime availabilityTime : availabilityTimes) {    
+//			    System.out.println("Availability Date: " + availabilityTime.getDate());
+//			    System.out.println("Time: " + availabilityTime.getTime());
+//			    System.out.println("Name: " + availabilityTime.getName());
+//			    System.out.println("Country: " + availabilityTime.getSpecializedCountry());
+//			    System.out.println("Job: " + availabilityTime.getSpecializedJob());
+//			    System.out.println("Email: " + availabilityTime.getEmail());
+//			    System.out.println("-----------------------------------");
+//			}
 
 		} 
 		catch (ClassNotFoundException | SQLException e) {
@@ -157,7 +159,6 @@ public class ConsultantAvailabilityTimeController extends HttpServlet {
 			for (AvailabilityTime availabilityTime : availabilityTimes) {
 			    System.out.println("Availability Date: " + availabilityTime.getDate());
 			    System.out.println("Time: " + availabilityTime.getTime());
-			    System.out.println("Name: " + availabilityTime.getName());
 			    System.out.println("Country: " + availabilityTime.getSpecializedCountry());
 			    System.out.println("Job: " + availabilityTime.getSpecializedJob());
 			    System.out.println("Email: " + availabilityTime.getEmail());
@@ -180,6 +181,43 @@ public class ConsultantAvailabilityTimeController extends HttpServlet {
 	     
 		
 
+	}
+	
+private void getAvailabiltyTimesByConsultant(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		int userId = Integer.parseInt(request.getParameter("userId")); 
+	
+		List<AvailabilityTime> availabilityTimes = new ArrayList<>();
+		
+		try 
+		{
+			availabilityTimes = getConsultantAvailabilityTimeService().getAvailabiltyTimesByConsultant(userId);
+			
+			if(availabilityTimes.isEmpty()) {
+				message = "No record found";
+			}
+			
+			for (AvailabilityTime availabilityTime : availabilityTimes) {    
+			    System.out.println("Availability Date: " + availabilityTime.getDate());
+			    System.out.println("Time: " + availabilityTime.getTime());
+			    System.out.println("Name: " + availabilityTime.getName());
+			    System.out.println("Country: " + availabilityTime.getSpecializedCountry());
+			    System.out.println("Job: " + availabilityTime.getSpecializedJob());
+			    System.out.println("Email: " + availabilityTime.getEmail());
+			    System.out.println("-----------------------------------");
+			}
+
+		} 
+		catch (ClassNotFoundException | SQLException e) {
+			message = e.getMessage();
+		}
+		
+		request.setAttribute("availabilityTimes", availabilityTimes);
+		request.setAttribute("feebackMessage", message);
+		
+//		RequestDispatcher rd = request.getRequestDispatcher("superAdminViewAdmins.jsp");
+//    	rd.forward(request, response);
+	     
 	}
 	
 
