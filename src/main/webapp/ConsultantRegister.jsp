@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1" isELIgnored="false"%>
-<%@ taglib prefix="tag" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <!DOCTYPE html>
@@ -20,7 +20,16 @@
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col-md-8 col-lg-6 col-xl-4">
     	<h3 class="text-center mb-4" style="color:#424C49;">Consultant Signup</h3>
-            <p>${feebackMessage}</p>
+        <c:set var="isError" value="${fn:startsWith(feebackMessage, 'operation')}" />
+
+    	<c:choose>
+        <c:when test="${isError}">
+            <p class="text-danger">${feebackMessage}</p>
+        </c:when>
+        <c:otherwise>
+            <p class="text-success">${feebackMessage}</p>
+        </c:otherwise>
+    	</c:choose>
 		<br/>
         <form action="ConsultantManager" method="POST">
           <!-- Username input -->

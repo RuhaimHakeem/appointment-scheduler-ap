@@ -6,6 +6,6 @@ import com.ruhaim.appointment.model.User;
 
 public interface UserManager {
 	
-	public User login(String username, String password) throws ClassNotFoundException, SQLException;
+	public User login(String username, String password, String role) throws ClassNotFoundException, SQLException;
 }
   

@@ -85,7 +85,7 @@ public class ConsultantController extends HttpServlet {
 		
 		clearMessage(); 
 		
-		int regId = Integer.parseInt(request.getParameter("regId")); 
+		 int regId = Integer.parseInt(request.getParameter("regId")); 
 		 String username = request.getParameter("username");
 	     String password = request.getParameter("password");
 	     String name = request.getParameter("name");

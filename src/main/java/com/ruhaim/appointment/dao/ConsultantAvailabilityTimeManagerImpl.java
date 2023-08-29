@@ -166,6 +166,7 @@ public class ConsultantAvailabilityTimeManagerImpl implements ConsultantAvailabi
 	    	AvailabilityTime availabilityTime = new AvailabilityTime(); 
 
 //	        availabilityTime.setName(rs.getString("consultant_name"));
+	    	availabilityTime.setAvailabilityTimeId(rs.getInt("availability_time_id"));
 	        availabilityTime.setDate(rs.getString("date"));
 	        availabilityTime.setTime(rs.getString("time"));
 	        availabilityTime.setSpecializedJob(rs.getString("specialized_job"));

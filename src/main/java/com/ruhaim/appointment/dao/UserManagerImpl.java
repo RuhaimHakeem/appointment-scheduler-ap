@@ -24,29 +24,51 @@ public class UserManagerImpl implements UserManager {
 	}
 
 	@Override
-	public User login(String username, String password) throws ClassNotFoundException, SQLException {
+	public User login(String username, String password, String role) throws ClassNotFoundException, SQLException {
 		// TODO Auto-generated method stub
-		Connection connection = getConnection();
-		String query = "SELECT * FROM user WHERE username=?";
+			Connection connection = getConnection();
+				
+				
+				String query = "SELECT * FROM user WHERE username = ? AND role = ? ";
+				
+				try {
+					PreparedStatement statement = connection.prepareStatement(query);
+					
+					statement.setString(1, username);
+					statement.setString(2, role);
+					
+					ResultSet rs = statement.executeQuery();
+					
+					User user = new User();
+					
+					while(rs.next())
+					{
+						if(username.equals(rs.getString("username")) && password.equals(rs.getString("password")))
+						{
+							
+							user.setUserId(rs.getInt("user_id"));
+							user.setUserName(rs.getString("username"));
+							user.setRole(rs.getString("role"));
+
+						}
+						
+						else
+						{
+							
+						}
+							
+						 
+					}
+					statement.close();
+					connection.close();
+					return user;
+				} catch(SQLException e) {
+					throw e;
+				}			
+					
+				
+				
 		
-		PreparedStatement ps = connection.prepareStatement(query);
-		ps.setString(1, username);
-		
-		ResultSet rs = ps.executeQuery();
-		
-		User user = new User();
-		
-		while(rs.next()) {
-			user.setUserId(rs.getInt("user_id"));
-			user.setUserName(rs.getString("username"));
-			user.setPassword(rs.getString("password"));
-		}
-		
-		ps.close();
-		connection.close();	
-		
-		
-		return user;
 	}
 
 }

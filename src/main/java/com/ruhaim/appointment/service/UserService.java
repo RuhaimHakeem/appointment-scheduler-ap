@@ -29,8 +29,8 @@ public class UserService {
 		
 	}
 	
-	public User login(String username, String password) throws ClassNotFoundException, SQLException {
-		return getUserManagerDao().login(username, username);
+	public User login(String username, String password, String role) throws ClassNotFoundException, SQLException {
+		return getUserManagerDao().login(username, password, role);
 	}
 
 	

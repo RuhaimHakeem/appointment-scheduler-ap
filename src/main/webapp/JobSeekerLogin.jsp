@@ -20,23 +20,28 @@
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col-md-8 col-lg-6 col-xl-4">
     	<h3 class="text-center mb-4" style="color:#424C49;">Job Seeker Login</h3>
-            <p>${feebackMessage}</p>
+         <c:if test="${not empty param.feedback}">
+    		<p class="text-danger">${param.feedback}</p>
+		</c:if>
 		<br/>
-        <form>
+        <form action="UserManager" method="POST">
           <!-- Username input -->
           <div class="form-outline mb-4">
             <input style="background: #F4F6F5" type="text" name="username" id="username" class="form-control form-control-lg"
-              placeholder="Enter the username" />
+              placeholder="Enter the username" required />
           </div>
 
           <!-- Password input -->
           <div class="form-outline mb-3">
             <input style="background: #F4F6F5" type="password" id="password" name="password" class="form-control form-control-lg"
-              placeholder="Enter password" />
+              placeholder="Enter password" required />
           </div>
+          
+            <input type="hidden" name="action" value="login"/>
+          <input type="hidden" name="role" value="job_seeker"/>
 
           <div class="text-center mt-4 pt-2">
-            <button type="button" class="btn btn-primary btn-lg" style="background: #5C7066; border:none; width: 120px"
+            <button type="submit" id="submit-btn" class="btn btn-primary btn-lg" style="background: #5C7066; border:none; width: 120px"
               style="padding-left: 2.5rem; padding-right: 2.5rem;">Login</button>
             <p style="color:#424C49;" class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? <a href="JobSeekerRegister.jsp"
                 class="link-danger">Register</a></p>
@@ -47,5 +52,14 @@
     </div>
 
 </section>
+
+<script>
+
+document.getElementById("submit-btn").addEventListener("click", () => {
+	var url= document.location.href;
+	window.history.pushState({}, "", url.split("?")[0]);
+});
+
+</script>
 </body>
 </html>

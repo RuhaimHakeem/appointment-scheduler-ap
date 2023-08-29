@@ -5,10 +5,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.ruhaim.appointment.model.AvailabilityTime;
 import com.ruhaim.appointment.service.ConsultantAvailabilityTimeService;
@@ -131,13 +133,17 @@ public class ConsultantAvailabilityTimeController extends HttpServlet {
 			if(getConsultantAvailabilityTimeService().deleteAvailabilityTime(availabilityTimeId)) {
 				message = "The Availability Time has been successfully deleted";
 			}
-			System.out.println("deleted");
 		} 
 		catch (ClassNotFoundException | SQLException e) {
 			System.out.println(e.getMessage());
 		}
 		
 		request.setAttribute("feebackMessage", message);
+		
+		HttpSession session = request.getSession();
+	    int userId = (int) session.getAttribute("userid");
+		
+		response.sendRedirect("AvailabilityManager?action=filterByConsultant&userId=" + userId);
 
 	}
 	
@@ -215,8 +221,8 @@ private void getAvailabiltyTimesByConsultant(HttpServletRequest request, HttpSer
 		request.setAttribute("availabilityTimes", availabilityTimes);
 		request.setAttribute("feebackMessage", message);
 		
-//		RequestDispatcher rd = request.getRequestDispatcher("superAdminViewAdmins.jsp");
-//    	rd.forward(request, response);
+		RequestDispatcher rd = request.getRequestDispatcher("ConsultantAvailabilityTimes.jsp");
+    	rd.forward(request, response);
 	     
 	}
 	
