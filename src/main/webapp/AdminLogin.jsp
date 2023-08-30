@@ -2,6 +2,7 @@
     pageEncoding="ISO-8859-1" isELIgnored="false"%>
 <%@ taglib prefix="tag" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE html>
 <html>
@@ -20,8 +21,13 @@
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col-md-8 col-lg-6 col-xl-4">
     	<h3 class="text-center mb-4" style="color:#424C49;">Admin Login</h3>
-          <c:if test="${not empty param.feedback}">
-    		<p>${param.feedback}</p>
+          <c:if test="${not empty sessionScope.feedbackMessage}">
+    	<div class="alert alert-danger" role="alert">
+        ${sessionScope.feedbackMessage}
+    	</div>
+    	<%
+        session.removeAttribute("feedbackMessage");
+    	%>
 		</c:if>
 		<br/>
         <form action="UserManager" method="POST">

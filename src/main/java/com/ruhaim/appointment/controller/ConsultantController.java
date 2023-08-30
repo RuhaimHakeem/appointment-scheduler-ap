@@ -75,7 +75,7 @@ public class ConsultantController extends HttpServlet {
 		
 			}
 			
-			request.setAttribute("feebackMessage", message);
+	     request.getSession().setAttribute("feedbackMessage", message);
 //			RequestDispatcher rd = request.getRequestDispatcher("job-seeker-login.jsp");
 //			rd.forward(request, response);
 	     
@@ -119,7 +119,7 @@ public class ConsultantController extends HttpServlet {
 				message = "operation failed! " + e.getMessage();
 			}
 			
-			request.setAttribute("feebackMessage", message);
+	     	request.getSession().setAttribute("feedbackMessage", message);
 			RequestDispatcher rd = request.getRequestDispatcher("ConsultantRegister.jsp");
 			rd.forward(request, response);
 	     

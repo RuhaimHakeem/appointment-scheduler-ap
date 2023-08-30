@@ -6,10 +6,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import com.ruhaim.appointment.model.Appointment;
 import com.ruhaim.appointment.service.AppointmentService;
 
@@ -86,7 +89,7 @@ public class AppointmentController extends HttpServlet {
 	    		 System.out.println("booked");
 	    	
 			} else {
-				 message = "Failed to book the appoinment!";
+				 message = "operation failed!: Unable to book the appoinment!";
 			}
 	    	   
 	     }
@@ -169,7 +172,7 @@ public class AppointmentController extends HttpServlet {
 		}
 		
 		request.setAttribute("appointments", appointmentDetails);
-		request.setAttribute("feebackMessage", message);
+		 request.getSession().setAttribute("feedbackMessage", message);
 		
 //		RequestDispatcher rd = request.getRequestDispatcher("superAdminViewAdmins.jsp");
 //    	rd.forward(request, response);
@@ -205,11 +208,10 @@ public class AppointmentController extends HttpServlet {
 			 message = e.getMessage();
 		}
 		
-		request.setAttribute("appointments", appointmentDetails);
-		request.setAttribute("feebackMessage", message);
+		 request.setAttribute("appointments", appointmentDetails);
 		
-//		RequestDispatcher rd = request.getRequestDispatcher("superAdminViewAdmins.jsp");
-//    	rd.forward(request, response);
+		RequestDispatcher rd = request.getRequestDispatcher("ConsultantAppointments.jsp");
+    	rd.forward(request, response);
 
 	}
 	
@@ -228,7 +230,7 @@ public class AppointmentController extends HttpServlet {
 			System.out.println(e.getMessage());
 		}
 		
-		request.setAttribute("feebackMessage", message);
+		 request.getSession().setAttribute("feedbackMessage", message);
 	
 		
 //		response.sendRedirect("getproduct?actiontype=all");
@@ -236,8 +238,6 @@ public class AppointmentController extends HttpServlet {
 	}
 	
 	private void updateAppointment(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-//		clearMessage();
 		
 
 		int appointmentid = Integer.parseInt(request.getParameter("appointmentId"));
@@ -248,16 +248,18 @@ public class AppointmentController extends HttpServlet {
 				message = "The appointment has been completed!";
 			}
 			else {
-				message = "Failed to complete the appointment!";
+				message = "operation failed!: Failed to complete the appointment!";
 			}
 		} 
 		catch (ClassNotFoundException | SQLException e) {
 			message = e.getMessage();
 		}
 		
-		request.setAttribute("feebackMessage", message);
-//		RequestDispatcher rd = request.getRequestDispatcher("search-and-update.jsp");
-//		rd.forward(request, response);
+		 request.getSession().setAttribute("feedbackMessage", message);
+		 HttpSession session = request.getSession();
+		 int userId = (int) session.getAttribute("userid");
+			
+		 response.sendRedirect("AppointmentManager?action=appointmentsByConsultant&userId=" + userId);
 		
 	}
 	

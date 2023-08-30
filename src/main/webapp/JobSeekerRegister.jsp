@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1" isELIgnored="false"%>
+<%@ taglib prefix="tag" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
@@ -18,15 +19,25 @@
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col-md-8 col-lg-6 col-xl-4">
     	<h3 class="text-center mb-4" style="color:#424C49;">Job Seeker Signup</h3>
-         <c:set var="isError" value="${fn:startsWith(feebackMessage, 'operation')}" />
+         <c:set var="isError" value="${fn:startsWith(sessionScope.feedbackMessage, 'operation')}" />
 
     	<c:choose>
         <c:when test="${isError}">
-            <p class="text-danger">${feebackMessage}</p>
+        <div class="alert alert-danger" role="alert">
+        		${sessionScope.feedbackMessage}
+    	</div>
+    		<%
+        	session.removeAttribute("feedbackMessage");
+    		%>
         </c:when>
-        <c:otherwise>
-            <p class="text-success">${feebackMessage}</p>
-        </c:otherwise>
+         <c:when test="${isError == false && !empty sessionScope.feedbackMessage }">
+         <div class="alert alert-success" role="alert">
+        		${sessionScope.feedbackMessage}
+    	</div>
+    		<%
+        	session.removeAttribute("feedbackMessage");
+    		%>
+        </c:when>
     	</c:choose>
 		<br/>
         <form action="JobSeekerManager" method="POST">
@@ -51,9 +62,8 @@
             <input style="background: #F4F6F5" type="email" id="email" name="email" class="form-control form-control-lg"
               placeholder="Enter email" required />
           </div>
-          
-			
-          
+          	
+          	<input type="hidden" name="action" value="register" />    
 
           <div class="text-center mt-4 pt-2">
             <button type="submit" class="btn btn-primary btn-lg" style="background: #5C7066; border:none; width: 120px"

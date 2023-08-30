@@ -35,8 +35,8 @@ public class UserController extends HttpServlet {
 		
 		if (action.equals("login")) {
 			login(request, response);
-        } else if (action.equals("")) {
-        	
+        } else if (action.equals("logout")) {
+        	logout(request, response);
         }
 	}
 	
@@ -76,12 +76,10 @@ public class UserController extends HttpServlet {
 			
 			   
 			  message = "Login failed. Invalid username or password";
-			  request.setAttribute("feedback", null);
-			  request.setAttribute("feedbackMessage", message);
+			  request.getSession().setAttribute("feedbackMessage", message);
 			  String referringPage = request.getHeader("referer");
 			    if (referringPage != null) {
-			        String redirectURL = referringPage + "?feedback=" + URLEncoder.encode(message, "UTF-8");
-			        response.sendRedirect(redirectURL);
+			        response.sendRedirect(referringPage);
 			    } 
 	    	
 		}
@@ -109,9 +107,27 @@ public class UserController extends HttpServlet {
     
 		}
 		
+	}
 	
-//		RequestDispatcher rd = request.getRequestDispatcher("add-product.jsp");
-//		rd.forward(request, response);
+	private void logout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		String role= request.getParameter("role");	
+		RequestDispatcher rd = null;
+        HttpSession session=request.getSession();  
+        session.invalidate();
+        
+        if(role.equals("admin") ) {
+			 rd = request.getRequestDispatcher("AdminLogin.jsp");
+		} else if(role.equals("job_seeker")) {
+			rd = request.getRequestDispatcher("JobSeekerLogin.jsp");
+		} else if (role.equals("consultant")) {
+			rd = request.getRequestDispatcher("ConsultantLogin.jsp");
+		}
+			
+		if(rd != null) {
+	    	rd.forward(request, response);
+		}
+        
 	}
 	
 	private void clearMessage() {

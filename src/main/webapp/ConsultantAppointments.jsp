@@ -136,7 +136,7 @@
       <c:set var="availabilityTimes" value="${availabilityTimes}" />
       
       <c:choose>
-    	<c:when test="${empty availabilityTimes}">
+    	<c:when test="${empty appointments}">
          <div class="alert alert-warning" role="alert">
   			No record found!
 	 	</div>
@@ -144,17 +144,29 @@
 	</c:choose>
 	
 
-        <c:if test="${not empty sessionScope.feedbackMessage}">
-    	<div class="alert alert-success" role="alert">
-        ${sessionScope.feedbackMessage}
-    	</div>
-    	<%
-        session.removeAttribute("feedbackMessage");
-    	%>
-		</c:if>
-	<br/>
+       <c:set var="isError" value="${fn:startsWith(sessionScope.feedbackMessage, 'operation')}" />
 
-      <h4 style="color:#424C49;" class="mb-4 text-center">Availability Times</h4>
+    	<c:choose>
+        <c:when test="${isError}">
+        <div class="alert alert-danger" role="alert">
+        		${sessionScope.feedbackMessage}
+    	</div>
+    		<%
+        	session.removeAttribute("feedbackMessage");
+    		%>
+        </c:when>
+         <c:when test="${isError == false && !empty sessionScope.feedbackMessage }">
+         <div class="alert alert-success" role="alert">
+        		${sessionScope.feedbackMessage}
+    	</div>
+    		<%
+        	session.removeAttribute("feedbackMessage");
+    		%>
+        </c:when>
+    	</c:choose>
+		<br/>
+
+      <h4 style="color:#424C49;" class="mb-4 text-center">My Appointments</h4>
      
       <div class="table-responsive text-center">
         
@@ -164,44 +176,51 @@
 		      <th scope="col">#</th>
 		      <th scope="col">Date</th>
 		      <th scope="col">Time</th>
+		      <th scope="col">Status</th>
+		      <th scope="col">Consultant Name</th>
+		       <th scope="col">Job Seeker Name</th>
 		      <th scope="col"></th>
 		    </tr>
 		  </thead>
 		  <tbody>
-		   <tag:forEach var="time" items="${availabilityTimes}">
+		   <tag:forEach var="appointment" items="${appointments}">
 		    <tr>
-		      <th>${time.availabilityTimeId}</th>
-		      <td>${time.date}</td>
-		      <td>${time.time}</td>
+		      <th>${appointment.appointmentId}</th>
+		      <td>${appointment.date}</td>
+		      <td>${appointment.time}</td>
+		      <td>${appointment.status}</td>
+		      <td>${appointment.consultantName}</td>
+		       <td>${appointment.jobSeekerName}</td>
 		      <td class="text-center">
-			
-				<button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                            data-target="#confirmationModal-${time.availabilityTimeId}">Delete</button>
-				  <div class="modal fade" id="confirmationModal-${time.availabilityTimeId}"
+			<c:if test="${appointment.status ne 'Completed'}">
+				<button type="button" style="background-color:#424C49; border:none" class="btn btn-primary btn-sm" data-toggle="modal"
+                            data-target="#confirmationModal-${appointment.appointmentId}">Complete</button>
+				  <div class="modal fade" id="confirmationModal-${appointment.appointmentId}"
                          aria-labelledby="confirmationModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="confirmationModalLabel">Confirm Deletion</h5>
+                                    <h5 class="modal-title" id="confirmationModalLabel">Confirm</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true"></span>
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    Are you sure you want to delete this availability time?
+                                    Are you sure you want to complete this appointment?
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                    <form action="AvailabilityManager" method="post" id="deleteForm-${time.availabilityTimeId}">
-                                        <input type="hidden" name="availabilityTimeId" value="${time.availabilityTimeId}">
-                                        <input type="hidden" name="action" value="deleteAvailability">
-                                        <button type="button" class="btn btn-danger" data-dismiss="modal"
-                                            onclick="submitDeleteForm('${time.availabilityTimeId}')">Delete</button>
+                                    <form action="AppointmentManager" method="post" id="completeForm-${appointment.appointmentId}">
+                                        <input type="hidden" name="appointmentId" value="${appointment.appointmentId}">
+                                        <input type="hidden" name="action" value="completeAppointment">
+                                        <button type="button" style="background-color:#424C49; border:none" class="btn btn-primary" data-dismiss="modal"
+                                            onclick="submitCompleteForm('${appointment.appointmentId}')">Complete</button>
                                     </form>
                                 </div>
                             </div>
                         </div>
-                    </div>						
+                    </div>	
+              </c:if>      					
 			 </td>
 		    </tr>
 		    </tag:forEach>
@@ -216,8 +235,8 @@
 </c:if> 
 <script>
     
-    function submitDeleteForm(formId) {
-        document.getElementById("deleteForm-" + formId).submit();
+    function submitCompleteForm(formId) {
+        document.getElementById("completeForm-" + formId).submit();
     }
 
 </script>

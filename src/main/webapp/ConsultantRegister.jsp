@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1" isELIgnored="false"%>
+<%@ taglib prefix="tag" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
@@ -14,22 +15,32 @@
 <body style="background: #E9ECEB;">
  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 <section class="vh-100">
-	
 
 
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col-md-8 col-lg-6 col-xl-4">
     	<h3 class="text-center mb-4" style="color:#424C49;">Consultant Signup</h3>
-        <c:set var="isError" value="${fn:startsWith(feebackMessage, 'operation')}" />
+        <c:set var="isError" value="${fn:startsWith(sessionScope.feedbackMessage, 'operation')}" />
 
     	<c:choose>
         <c:when test="${isError}">
-            <p class="text-danger">${feebackMessage}</p>
+        <div class="alert alert-danger" role="alert">
+        		${sessionScope.feedbackMessage}
+    	</div>
+    		<%
+        	session.removeAttribute("feedbackMessage");
+    		%>
         </c:when>
-        <c:otherwise>
-            <p class="text-success">${feebackMessage}</p>
-        </c:otherwise>
+         <c:when test="${isError == false && !empty sessionScope.feedbackMessage }">
+         <div class="alert alert-success" role="alert">
+        		${sessionScope.feedbackMessage}
+    	</div>
+    		<%
+        	session.removeAttribute("feedbackMessage");
+    		%>
+        </c:when>
     	</c:choose>
+    		
 		<br/>
         <form action="ConsultantManager" method="POST">
           <!-- Username input -->

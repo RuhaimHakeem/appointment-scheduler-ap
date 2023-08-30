@@ -74,13 +74,13 @@
               </a>
             </li>
              <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="#">
+              <a class="nav-link d-flex align-items-center gap-2" href="ConsultantAddAvailabilityTime.jsp">
                 <svg class="bi"><use xlink:href="#chevron-right"/></svg>
                 Add Availability Times
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="#">
+              <a class="nav-link d-flex align-items-center gap-2" href="AppointmentManager?action=appointmentsByConsultant&userId=${sessionScope.userid}">
                 <svg class="bi"><use xlink:href="#list"/></svg>
                 My Appointments
               </a>
@@ -92,10 +92,14 @@
           <ul class="nav flex-column mb-auto">
            
             <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="#">
+            <form action="UserManager" method="POST">
+     		<input type="hidden" name="role" value="consultant"/>
+     		<input type="hidden" name="action" value="logout"/>
+              <button type="submit" style="border: none; background:none" class="nav-link d-flex align-items-center gap-2">
                 <svg class="bi"><use xlink:href="#door-closed"/></svg>
                 Sign out
-              </a>
+              </button>      
+              </form>
             </li>
           </ul>
         </div>
