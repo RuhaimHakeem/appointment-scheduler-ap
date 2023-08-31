@@ -1,3 +1,8 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1" isELIgnored="false"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -48,7 +53,11 @@
   </symbol>
 </svg>
 
-	<div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+	<div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary" style=" position: sticky;
+  top: 0;
+  z-index: 1000;
+  height: 100vh;
+  overflow-y: auto;">
       <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
         <div class="offcanvas-header">
           <h5 class="offcanvas-title" id="sidebarMenuLabel">The Jobs</h5>
@@ -57,19 +66,19 @@
         <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
           <ul class="nav flex-column">
             <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="#">
+              <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="JobSeekerDashboard.jsp">
                 <svg class="bi"><use xlink:href="#house-fill"/></svg>
                 Dashboard
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="#">
+              <a class="nav-link d-flex align-items-center gap-2" href="AvailabilityManager">
                 <svg class="bi"><use xlink:href="#file-earmark"/></svg>
                 Book Appointments
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="#">
+              <a class="nav-link d-flex align-items-center gap-2" href="AppointmentManager?action=appointmentsbyJobSeeker&userId=${sessionScope.userid}">
                 <svg class="bi"><use xlink:href="#list"/></svg>
                 My Appointments
               </a>
@@ -81,10 +90,14 @@
           <ul class="nav flex-column mb-auto">
            
             <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="#">
+              <form action="UserManager" method="POST">
+     		<input type="hidden" name="role" value="job_seeker"/>
+     		<input type="hidden" name="action" value="logout"/>
+              <button type="submit" style="border: none; background:none" class="nav-link d-flex align-items-center gap-2">
                 <svg class="bi"><use xlink:href="#door-closed"/></svg>
                 Sign out
-              </a>
+              </button>      
+              </form>
             </li>
           </ul>
         </div>

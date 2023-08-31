@@ -12,7 +12,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.115.4">
-    <title>Consultant</title>
+    <title>Job Seeker</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/dashboard/">
     
@@ -109,17 +109,17 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
-<c:if test="${sessionScope.username != null && sessionScope.role == 'consultant'}">
+<c:if test="${sessionScope.username != null && sessionScope.role == 'job_seeker'}">
 <jsp:include page="shared/navbar.jsp" />
 
 <div class="container-fluid">
   <div class="row">
  
     
-	<jsp:include page="shared/ConsultantSidebar.jsp" />
+	<jsp:include page="shared/JobSeekerSidebar.jsp" />
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Consultant Dashboard</h1>
+        <h1 class="h2">Job Seeker Dashboard</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group me-2">
             <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
@@ -133,7 +133,7 @@
       </div>
      
       
-      <c:set var="availabilityTimes" value="${availabilityTimes}" />
+      <c:set var="appointment" value="${appointments}" />
       
       <c:choose>
     	<c:when test="${empty appointments}">
@@ -168,7 +168,8 @@
 
       <h4 style="color:#424C49;" class="mb-4 text-center">My Appointments</h4>
       
-         <div class="row d-flex justify-content-center">
+       
+      <div class="row d-flex justify-content-center">
 
       
       <form action="AppointmentManager" method="GET">
@@ -184,10 +185,11 @@
 		
 			</div>
 			<input type="hidden" name="userId" value="${sessionScope.userid}">
-            <input type="hidden" name="action" value="appointmentsByConsultant">
+            <input type="hidden" name="action" value="appointmentsbyJobSeeker">
           <div class="text-center mt-4 pt-2">
             <button type="submit" id="submit-btn" class="btn btn-primary btn-lg mb-4" style="background: #5C7066; border:none; width: 120px"
-              style="padding-left: 2.5rem; padding-right: 2.5rem;">Filter</button>   
+              style="padding-left: 2.5rem; padding-right: 2.5rem;">Filter</button>
+           
           </div>
         </form>
         </div>
@@ -202,49 +204,48 @@
 		      <th scope="col">Time</th>
 		      <th scope="col">Status</th>
 		      <th scope="col">Consultant Name</th>
-		       <th scope="col">Job Seeker Name</th>
+		      <th scope="col">Job Seeker Name</th>
 		      <th scope="col"></th>
 		    </tr>
 		  </thead>
 		  <tbody>
 		   <tag:forEach var="appointment" items="${appointments}">
 		    <tr>
-		      <th>${appointment.appointmentId}</th>
+		        <th>${appointment.appointmentId}</th>
 		      <td>${appointment.date}</td>
 		      <td>${appointment.time}</td>
 		      <td>${appointment.status}</td>
 		      <td>${appointment.consultantName}</td>
 		       <td>${appointment.jobSeekerName}</td>
 		      <td class="text-center">
-			<c:if test="${appointment.status ne 'Completed'}">
-				<button type="button" style="background-color:#424C49; border:none" class="btn btn-primary btn-sm" data-toggle="modal"
-                            data-target="#confirmationModal-${appointment.appointmentId}">Complete</button>
+			
+				<button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                            data-target="#confirmationModal-${appointment.appointmentId}">Delete</button>
 				  <div class="modal fade" id="confirmationModal-${appointment.appointmentId}"
                          aria-labelledby="confirmationModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="confirmationModalLabel">Confirm</h5>
+                                    <h5 class="modal-title" id="confirmationModalLabel">Confirm Deletion</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true"></span>
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    Are you sure you want to complete this appointment?
+                                    Are you sure you want to delete this appointment?
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                    <form action="AppointmentManager" method="post" id="completeForm-${appointment.appointmentId}">
+                                    <form action="AppointmentManager" method="post" id="deleteForm-${appointment.appointmentId}">
                                         <input type="hidden" name="appointmentId" value="${appointment.appointmentId}">
-                                        <input type="hidden" name="action" value="completeAppointment">
-                                        <button type="button" style="background-color:#424C49; border:none" class="btn btn-primary" data-dismiss="modal"
-                                            onclick="submitCompleteForm('${appointment.appointmentId}')">Complete</button>
+                                        <input type="hidden" name="action" value="deleteAppointment">
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal"
+                                            onclick="submitDeleteForm('${appointment.appointmentId}')">Delete</button>
                                     </form>
                                 </div>
                             </div>
                         </div>
-                    </div>	
-              </c:if>      					
+                    </div>						
 			 </td>
 		    </tr>
 		    </tag:forEach>
@@ -259,8 +260,8 @@
 </c:if> 
 <script>
     
-    function submitCompleteForm(formId) {
-        document.getElementById("completeForm-" + formId).submit();
+    function submitDeleteForm(formId) {
+        document.getElementById("deleteForm-" + formId).submit();
     }
     
     window.onload = function() {

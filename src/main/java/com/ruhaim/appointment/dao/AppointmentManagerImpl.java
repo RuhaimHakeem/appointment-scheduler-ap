@@ -103,7 +103,7 @@ public class AppointmentManagerImpl implements AppointmentManager {
 	}
 
 	@Override
-	public List<AppointmentDetails> getAppointmentsByJobSeeker(int userId) throws SQLException, ClassNotFoundException {
+	public List<AppointmentDetails> getAppointmentsByJobSeeker(int userId, String status) throws SQLException, ClassNotFoundException {
 		Connection connection = getConnection();
 		 
 		 int jobSeekerId = Helpers.fetchJobSeekerId(connection, userId);
@@ -113,11 +113,13 @@ public class AppointmentManagerImpl implements AppointmentManager {
                 "FROM appointment a " +
                 "JOIN consultant c ON a.consultant_id = c.consultant_id " +
                 "JOIN job_seeker j ON a.job_seeker_id = j.job_seeker_id " +
-                "WHERE a.job_seeker_id = ?";
+                "WHERE a.job_seeker_id = ? AND (a.status = ? OR ? IS NULL)";
 		 
 
 	    PreparedStatement ps = connection.prepareStatement(query);
 	    ps.setInt(1, jobSeekerId);
+	    ps.setString(2, status);
+	    ps.setString(3, status);
 	    
 	    List<AppointmentDetails> appointmentDetailsList = new ArrayList<>();
 	    
@@ -135,7 +137,7 @@ public class AppointmentManagerImpl implements AppointmentManager {
 	
 
 	@Override
-	public List<AppointmentDetails> getAppointmentsByConsultant(int userId) throws SQLException, ClassNotFoundException {
+	public List<AppointmentDetails> getAppointmentsByConsultant(int userId, String status) throws SQLException, ClassNotFoundException {
 		Connection connection = getConnection();
 		 
 		 int consultantId = Helpers.fetchConsultantId(connection, userId);
@@ -144,11 +146,13 @@ public class AppointmentManagerImpl implements AppointmentManager {
                "FROM appointment a " +
                "JOIN consultant c ON a.consultant_id = c.consultant_id " +
                "JOIN job_seeker j ON a.job_seeker_id = j.job_seeker_id " +
-               "WHERE a.consultant_id = ?";
+               "WHERE a.consultant_id = ? AND (a.status = ? OR ? IS NULL)";
 		 
 
 	    PreparedStatement ps = connection.prepareStatement(query);
 	    ps.setInt(1, consultantId);
+	    ps.setString(2, status);
+	    ps.setString(3, status);
 	    
 	    List<AppointmentDetails> appointmentDetailsList = new ArrayList<>();
 	    

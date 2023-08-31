@@ -72,6 +72,13 @@ public class AppointmentController extends HttpServlet {
 	     int userId = Integer.parseInt(request.getParameter("userId")); 
 	     int consultantId = Integer.parseInt(request.getParameter("consultantId")); 
 	     int availabilityTimeId = Integer.parseInt(request.getParameter("availabilityTimeId")); 
+	     
+	     System.out.println(date);
+	     System.out.println(time);
+	     System.out.println(status);
+	     System.out.println(userId);
+	     System.out.println(consultantId);
+	     System.out.println(availabilityTimeId);
 	   
 	     
 	     Appointment appointment = new Appointment();
@@ -80,27 +87,25 @@ public class AppointmentController extends HttpServlet {
 	     appointment.setStatus(status);
 	     appointment.setConsultantId(consultantId);
 	    
+	    
 	     
 	     try {
 	    	 
 	    	 if(getAppointmentService().bookAppointment(appointment, userId, availabilityTimeId)) {
 	    		 
 	    		 message = "The Appointment has been booked successfully!";
-	    		 System.out.println("booked");
 	    	
 			} else {
-				 message = "operation failed!: Unable to book the appoinment!";
+				 message = "operation failed! Unable to book the appoinment!";
 			}
 	    	   
 	     }
 	     catch (ClassNotFoundException | SQLException e) {
-	    	 message = "Failed to book the appoinment!";
 	    	 System.out.println(e.getMessage());
 		}
 			
-			request.setAttribute("feebackMessage", message);
-//			RequestDispatcher rd = request.getRequestDispatcher("job-seeker-login.jsp");
-//			rd.forward(request, response);
+	     	request.getSession().setAttribute("feedbackMessage", message);
+	     	response.sendRedirect("AvailabilityManager");
 	     
 		}
 	
@@ -144,12 +149,13 @@ public class AppointmentController extends HttpServlet {
 	{
 		
 		int userId = Integer.parseInt(request.getParameter("userId")); 
+		String status = request.getParameter("status"); 
 
 		List<AppointmentDetails> appointmentDetails = new ArrayList<>();
 		
 		try 
 		{
-			appointmentDetails = getAppointmentService().getAppointmentsByJobSeeker(userId);
+			appointmentDetails = getAppointmentService().getAppointmentsByJobSeeker(userId, status);
 			
 			if(appointmentDetails.isEmpty()) {
 				message = "No record found";
@@ -166,16 +172,13 @@ public class AppointmentController extends HttpServlet {
 
 		} 
 		catch (ClassNotFoundException | SQLException e) {
-			 System.out.println(e.getMessage());
-			 System.out.println("I am error here");
 			message = e.getMessage();
 		}
 		
-		request.setAttribute("appointments", appointmentDetails);
-		 request.getSession().setAttribute("feedbackMessage", message);
+		 request.setAttribute("appointments", appointmentDetails);
 		
-//		RequestDispatcher rd = request.getRequestDispatcher("superAdminViewAdmins.jsp");
-//    	rd.forward(request, response);
+		RequestDispatcher rd = request.getRequestDispatcher("JobSeekerAppointments.jsp");
+    	rd.forward(request, response);
 
 	}
 	
@@ -183,12 +186,13 @@ public class AppointmentController extends HttpServlet {
 	{
 		
 		int userId = Integer.parseInt(request.getParameter("userId")); 
+		String status = request.getParameter("status"); 
 
 		List<AppointmentDetails> appointmentDetails = new ArrayList<>();
 		
 		try 
 		{
-			appointmentDetails = getAppointmentService().getAppointmentsByConsultant(userId);
+			appointmentDetails = getAppointmentService().getAppointmentsByConsultant(userId, status);
 			
 			if(appointmentDetails.isEmpty()) {
 				message = "No record found";
@@ -227,13 +231,15 @@ public class AppointmentController extends HttpServlet {
 			
 		} 
 		catch (ClassNotFoundException | SQLException e) {
-			System.out.println(e.getMessage());
+			message = "operation failed! Unable to delete appointment";
 		}
 		
-		 request.getSession().setAttribute("feedbackMessage", message);
-	
+		request.getSession().setAttribute("feedbackMessage", message);
 		
-//		response.sendRedirect("getproduct?actiontype=all");
+		HttpSession session = request.getSession();
+	    int userId = (int) session.getAttribute("userid");
+		
+		response.sendRedirect("AppointmentManager?action=appointmentsbyJobSeeker&userId=" + userId);
 
 	}
 	
@@ -248,7 +254,7 @@ public class AppointmentController extends HttpServlet {
 				message = "The appointment has been completed!";
 			}
 			else {
-				message = "operation failed!: Failed to complete the appointment!";
+				message = "operation failed! Failed to complete the appointment!";
 			}
 		} 
 		catch (ClassNotFoundException | SQLException e) {

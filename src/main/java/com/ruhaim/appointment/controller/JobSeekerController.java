@@ -68,17 +68,17 @@ public class JobSeekerController extends HttpServlet {
     		 
     		message = "The Job seeker has been registered successfully!";
 		} else {
-			message = "Failed to register the Job Seeker!";
+			message = "operation failed! Unable to register the Job Seeker!";
 		}
     	   
      }
      catch (ClassNotFoundException | SQLException e) {
-			message = "operation failed! " + e.getMessage();
-		}
+    	 message = "operation failed! Unable to register the Job Seeker!";
+     }
 		
      	request.getSession().setAttribute("feedbackMessage", message);
-		RequestDispatcher rd = request.getRequestDispatcher("JobSeekerRegister.jsp");
-		rd.forward(request, response);
+     	response.sendRedirect("JobSeekerRegister.jsp");
+	
      
 	}
 	
@@ -124,7 +124,7 @@ public class JobSeekerController extends HttpServlet {
 			}
 		} 
 		catch (ClassNotFoundException | SQLException e) {
-			
+			message = "operation failed! Unable to delete the job seeker!";
 		}
 		request.getSession().setAttribute("feedbackMessage", message);
 		

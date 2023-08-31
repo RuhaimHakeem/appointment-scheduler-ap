@@ -73,7 +73,6 @@ public class UserController extends HttpServlet {
 		
 		if(dbUsername == null)
 		{
-			
 			   
 			  message = "Login failed. Invalid username or password";
 			  request.getSession().setAttribute("feedbackMessage", message);

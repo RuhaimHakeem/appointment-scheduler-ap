@@ -44,7 +44,7 @@ public class ConsultantAvailabilityTimeController extends HttpServlet {
 	        	getAvailabiltyTimesByConsultant(request,response);
 	        }
 		} else {
-			getAllAvailabiltyTimes(request, response);
+			getAvailabiltyTimesByJobAndCountry(request, response);
 		}
 	}
 
@@ -76,7 +76,7 @@ public class ConsultantAvailabilityTimeController extends HttpServlet {
 	    		 
 	    		message = "The Availability Time has been added successfully!";
 			} else {
-				message = "Failed to add the availability time!";
+				message = "operation failed: Unable to add the availability time!";
 			}
 	    	   
 	     }
@@ -85,8 +85,8 @@ public class ConsultantAvailabilityTimeController extends HttpServlet {
 			}
 			
 	     	request.getSession().setAttribute("feedbackMessage", message);
-			RequestDispatcher rd = request.getRequestDispatcher("ConsultantAddAvailabilityTime.jsp");
-			rd.forward(request, response);
+	     	response.sendRedirect("ConsultantAddAvailabilityTime.jsp");
+
 	}
 	
 	private void getAllAvailabiltyTimes(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -120,8 +120,8 @@ public class ConsultantAvailabilityTimeController extends HttpServlet {
 		request.setAttribute("availabilityTimes", availabilityTimes);
 		request.setAttribute("feebackMessage", message);
 		
-//		RequestDispatcher rd = request.getRequestDispatcher("superAdminViewAdmins.jsp");
-//    	rd.forward(request, response);
+		RequestDispatcher rd = request.getRequestDispatcher("JobSeekerBookAppointment.jsp");
+    	rd.forward(request, response);
 	     
 	}
 	
@@ -135,7 +135,7 @@ public class ConsultantAvailabilityTimeController extends HttpServlet {
 			}
 		} 
 		catch (ClassNotFoundException | SQLException e) {
-			System.out.println(e.getMessage());
+			message = "operation failed! Unable to delete Availability Timw";
 		}
 		
 		request.getSession().setAttribute("feedbackMessage", message);
@@ -164,14 +164,6 @@ public class ConsultantAvailabilityTimeController extends HttpServlet {
 				message = "No record found";
 			}
 			
-			for (AvailabilityTime availabilityTime : availabilityTimes) {
-			    System.out.println("Availability Date: " + availabilityTime.getDate());
-			    System.out.println("Time: " + availabilityTime.getTime());
-			    System.out.println("Country: " + availabilityTime.getSpecializedCountry());
-			    System.out.println("Job: " + availabilityTime.getSpecializedJob());
-			    System.out.println("Email: " + availabilityTime.getEmail());
-			    System.out.println("-----------------------------------");
-			}
 			System.out.println(message);
 		} 
 
@@ -184,8 +176,8 @@ public class ConsultantAvailabilityTimeController extends HttpServlet {
 		request.setAttribute("availabilityTimes", availabilityTimes);
 		request.setAttribute("feedbackMessage", message);
 		
-//		RequestDispatcher rd = request.getRequestDispatcher("superAdminViewAdmins.jsp");
-//    	rd.forward(request, response);
+		RequestDispatcher rd = request.getRequestDispatcher("JobSeekerBookAppointment.jsp");
+    	rd.forward(request, response);
 	     
 		
 
@@ -205,15 +197,6 @@ public class ConsultantAvailabilityTimeController extends HttpServlet {
 				message = "No record found";
 			}
 			
-			for (AvailabilityTime availabilityTime : availabilityTimes) {    
-			    System.out.println("Availability Date: " + availabilityTime.getDate());
-			    System.out.println("Time: " + availabilityTime.getTime());
-			    System.out.println("Name: " + availabilityTime.getName());
-			    System.out.println("Country: " + availabilityTime.getSpecializedCountry());
-			    System.out.println("Job: " + availabilityTime.getSpecializedJob());
-			    System.out.println("Email: " + availabilityTime.getEmail());
-			    System.out.println("-----------------------------------");
-			}
 
 		} 
 		catch (ClassNotFoundException | SQLException e) {

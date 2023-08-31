@@ -53,7 +53,11 @@
   </symbol>
 </svg>
 
-	<div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+	<div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary" style=" position: sticky;
+  top: 0;
+  z-index: 1000;
+  height: 100vh;
+  overflow-y: auto;">
       <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
         <div class="offcanvas-header">
           <h5 class="offcanvas-title" id="sidebarMenuLabel">The Jobs</h5>

@@ -116,7 +116,7 @@
 	<jsp:include page="shared/ConsultantSidebar.jsp" />
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Consultant Dashboard</h1>
+        <h2 class="h2" style="color:#424C49;">Consultant Dashboard</h2>
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group me-2">
             <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
@@ -130,12 +130,10 @@
       </div>
       
       <div>
-      <h3 class="h3">User Name: ${sessionScope.username}</h3>
-      <h3 class="h3">User Id: ${sessionScope.userid}</h3>  
+      <h3 class="h4" style="color:#424C49;">User Name: ${sessionScope.username}</h3>
+      <h3 class="h4" style="color:#424C49;">User Id: ${sessionScope.userid}</h3>  
       </div>
 
-
-      <h2>Section title</h2>
   
     </main>
   </div>

@@ -144,15 +144,27 @@
 	</c:choose>
 	
 
-        <c:if test="${not empty sessionScope.feedbackMessage}">
-    	<div class="alert alert-success" role="alert">
-        ${sessionScope.feedbackMessage}
+       <c:set var="isError" value="${fn:startsWith(sessionScope.feedbackMessage, 'operation')}" />
+
+    	<c:choose>
+        <c:when test="${isError}">
+        <div class="alert alert-danger" role="alert">
+        		${sessionScope.feedbackMessage}
     	</div>
-    	<%
-        session.removeAttribute("feedbackMessage");
-    	%>
-		</c:if>
-	<br/>
+    		<%
+        	session.removeAttribute("feedbackMessage");
+    		%>
+        </c:when>
+         <c:when test="${isError == false && !empty sessionScope.feedbackMessage }">
+         <div class="alert alert-success" role="alert">
+        		${sessionScope.feedbackMessage}
+    	</div>
+    		<%
+        	session.removeAttribute("feedbackMessage");
+    		%>
+        </c:when>
+    	</c:choose>
+		<br/>
 
       <h4 style="color:#424C49;" class="mb-4 text-center">Availability Times</h4>
      

@@ -73,6 +73,10 @@
       			<option value="Civil Engineer">Civil Engineer</option>
       			<option value="Doctor">Doctor</option>
       			<option value="Accountant">Accountant</option>
+      			<option value="Teacher">Teacher</option>
+      			<option value="Chef">Chef</option>
+      			<option value="Sales">Sales</option>
+      			
 			</select>
 			</div>
 			
@@ -84,6 +88,7 @@
       			<option value="Switzerland">Switzerland</option>
       			<option value="Qatar">Qatar</option>
       			<option value="Dubai">Dubai</option>
+      			<option value="India">India</option>
 			</select>
 			</div>
 				

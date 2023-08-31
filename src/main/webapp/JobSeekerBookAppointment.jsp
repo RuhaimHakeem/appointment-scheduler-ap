@@ -12,7 +12,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.115.4">
-    <title>Consultant</title>
+    <title>Job Seeker</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/dashboard/">
     
@@ -109,17 +109,17 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
-<c:if test="${sessionScope.username != null && sessionScope.role == 'consultant'}">
+<c:if test="${sessionScope.username != null && sessionScope.role == 'job_seeker'}">
 <jsp:include page="shared/navbar.jsp" />
 
 <div class="container-fluid">
   <div class="row">
  
     
-	<jsp:include page="shared/ConsultantSidebar.jsp" />
+	<jsp:include page="shared/JobSeekerSidebar.jsp" />
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Consultant Dashboard</h1>
+        <h1 class="h2">Job Seeker Dashboard</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group me-2">
             <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
@@ -136,7 +136,7 @@
       <c:set var="availabilityTimes" value="${availabilityTimes}" />
       
       <c:choose>
-    	<c:when test="${empty appointments}">
+    	<c:when test="${empty availabilityTimes}">
          <div class="alert alert-warning" role="alert">
   			No record found!
 	 	</div>
@@ -166,31 +166,48 @@
     	</c:choose>
 		<br/>
 
-      <h4 style="color:#424C49;" class="mb-4 text-center">My Appointments</h4>
+      <h4 style="color:#424C49;" class="mb-4 text-center">Consultant Availability Times</h4>
       
-         <div class="row d-flex justify-content-center">
+      <div class="row d-flex justify-content-center">
 
       
-      <form action="AppointmentManager" method="GET">
+      <form action="AvailabilityManager" method="GET">
 			<div class="d-flex justify-content-center">
 
           	<div class="form-outline mb-3">
-			<select class="form-select bg-light mr-4" style="color:#868e93; border-color:#D3D3D3; padding: 12px;" aria-label="Default select example"  name="status">
- 				<option value="" disabled selected >Select Status</option>
-      			<option value="Completed">Completed</option>
-      			<option value="Booked">Booked</option>
+			<select class="form-select bg-light mr-4" style="color:#868e93; border-color:#D3D3D3; padding: 12px;" aria-label="Default select example"  name="job">
+ 				<option value="" disabled selected >Select the job</option>
+      			<option value="Software Engineer">Software Engineer</option>
+      			<option value="Civil Engineer">Civil Engineer</option>
+      			<option value="Doctor">Doctor</option>
+      			<option value="Accountant">Accountant</option>
+      			<option value="Teacher">Teacher</option>
+      			<option value="Chef">Chef</option>
+      			<option value="Sales">Sales</option>
 			</select>
 			</div>
-		
+			
+			<div class="form-outline mb-3">
+			<select class="form-select bg-light ml-4" style="color:#868e93; border-color:#D3D3D3; padding: 12px;" aria-label="Default select example"  name="country">
+ 				<option value="" disabled selected >Select the country</option>
+      			<option value="England">England</option>
+      			<option value="America">America</option>
+      			<option value="Switzerland">Switzerland</option>
+      			<option value="Qatar">Qatar</option>
+      			<option value="Dubai">Dubai</option>
+      			<option value="India">India</option>
+			</select>
 			</div>
-			<input type="hidden" name="userId" value="${sessionScope.userid}">
-            <input type="hidden" name="action" value="appointmentsByConsultant">
+			</div>
+
           <div class="text-center mt-4 pt-2">
             <button type="submit" id="submit-btn" class="btn btn-primary btn-lg mb-4" style="background: #5C7066; border:none; width: 120px"
-              style="padding-left: 2.5rem; padding-right: 2.5rem;">Filter</button>   
+              style="padding-left: 2.5rem; padding-right: 2.5rem;">Filter</button>
+           
           </div>
         </form>
         </div>
+ 
      
       <div class="table-responsive text-center">
         
@@ -200,51 +217,58 @@
 		      <th scope="col">#</th>
 		      <th scope="col">Date</th>
 		      <th scope="col">Time</th>
-		      <th scope="col">Status</th>
-		      <th scope="col">Consultant Name</th>
-		       <th scope="col">Job Seeker Name</th>
+		      <th scope="col">Name</th>
+		      <th scope="col">Country</th>
+		      <th scope="col">Job</th>
+		      <th scope="col">Email</th>
 		      <th scope="col"></th>
 		    </tr>
 		  </thead>
 		  <tbody>
-		   <tag:forEach var="appointment" items="${appointments}">
+		   <tag:forEach var="time" items="${availabilityTimes}">
 		    <tr>
-		      <th>${appointment.appointmentId}</th>
-		      <td>${appointment.date}</td>
-		      <td>${appointment.time}</td>
-		      <td>${appointment.status}</td>
-		      <td>${appointment.consultantName}</td>
-		       <td>${appointment.jobSeekerName}</td>
+		      <th>${time.consultantId}</th>
+		      <td>${time.date}</td>
+		      <td>${time.time}</td>
+		      <td>${time.name}</td>
+		      <td>${time.specializedCountry}</td>
+		      <td>${time.specializedJob}</td>
+		      <td>${time.email}</td>
+		      
+		    
 		      <td class="text-center">
-			<c:if test="${appointment.status ne 'Completed'}">
+			
 				<button type="button" style="background-color:#424C49; border:none" class="btn btn-primary btn-sm" data-toggle="modal"
-                            data-target="#confirmationModal-${appointment.appointmentId}">Complete</button>
-				  <div class="modal fade" id="confirmationModal-${appointment.appointmentId}"
+                            data-target="#confirmationModal-${time.availabilityTimeId}">Book Now</button>
+				  <div class="modal fade" id="confirmationModal-${time.availabilityTimeId}"
                          aria-labelledby="confirmationModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="confirmationModalLabel">Confirm</h5>
+                                    <h5 class="modal-title" id="confirmationModalLabel">Confirm Booking</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true"></span>
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    Are you sure you want to complete this appointment?
+                                    Are you sure you want to book the appointment?
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                    <form action="AppointmentManager" method="post" id="completeForm-${appointment.appointmentId}">
-                                        <input type="hidden" name="appointmentId" value="${appointment.appointmentId}">
-                                        <input type="hidden" name="action" value="completeAppointment">
+                                    <form action="AppointmentManager" method="post" id="bookForm-${time.availabilityTimeId}">
+                                        <input type="hidden" name="availabilityTimeId" value="${time.availabilityTimeId}">
+                                        <input type="hidden" name="date" value="${time.date}">
+                                        <input type="hidden" name="time" value="${time.time}">
+                                        <input type="hidden" name="userId" value="${sessionScope.userid}">
+                                        <input type="hidden" name="consultantId" value="${time.consultantId}">
+                                        <input type="hidden" name="action" value="bookAppointment">
                                         <button type="button" style="background-color:#424C49; border:none" class="btn btn-primary" data-dismiss="modal"
-                                            onclick="submitCompleteForm('${appointment.appointmentId}')">Complete</button>
+                                            onclick="submitBookForm('${time.availabilityTimeId}')">Book Now</button>
                                     </form>
                                 </div>
                             </div>
                         </div>
-                    </div>	
-              </c:if>      					
+                    </div>						
 			 </td>
 		    </tr>
 		    </tag:forEach>
@@ -259,18 +283,15 @@
 </c:if> 
 <script>
     
-    function submitCompleteForm(formId) {
-        document.getElementById("completeForm-" + formId).submit();
+    function submitBookForm(formId) {
+    	console.log(formId);
+        document.getElementById("bookForm-" + formId).submit();
     }
     
     window.onload = function() {
         if (window.location.search) {
-            var urlParams = new URLSearchParams(window.location.search);
-            urlParams.delete("status");
-            
-            var updatedUrl = window.location.pathname + '?' + urlParams.toString();
-
-            window.history.replaceState({}, document.title, updatedUrl);
+            var urlWithoutParams = window.location.href.split("?")[0];
+            window.history.replaceState({}, document.title, urlWithoutParams);
         }
     };
 

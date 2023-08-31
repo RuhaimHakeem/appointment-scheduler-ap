@@ -111,17 +111,16 @@ public class ConsultantController extends HttpServlet {
 	    		 message = "The Consultant has been registered successfully!";
 	    	
 			} else {
-				 message = "Failed to register the Consultant!";
+				 message = "operation failed! Unable to register the Consultant!";
 			}
 	    	   
 	     }
 	     catch (ClassNotFoundException | SQLException e) {
-				message = "operation failed! " + e.getMessage();
+	    	 message = "operation failed: Unable to register the Consultant!";
 			}
 			
 	     	request.getSession().setAttribute("feedbackMessage", message);
-			RequestDispatcher rd = request.getRequestDispatcher("ConsultantRegister.jsp");
-			rd.forward(request, response);
+	     	response.sendRedirect("ConsultantRegister.jsp");
 	     
 		}
 	
@@ -138,7 +137,7 @@ public class ConsultantController extends HttpServlet {
 			
 		} 
 		catch (ClassNotFoundException | SQLException e) {
-			message = "Failed to delete the consultant!";
+			message = "operation failed! Unable to delete the consultant!";
 		}
 		
 		request.setAttribute("feebackMessage", message);
