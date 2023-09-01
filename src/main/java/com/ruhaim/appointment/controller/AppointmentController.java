@@ -117,7 +117,7 @@ public class AppointmentController extends HttpServlet {
 		
 		try 
 		{
-			appointmentDetails = getAppointmentService().getAllJobSeekers(status);
+			appointmentDetails = getAppointmentService().getAllAppointments(status);
 			
 			if(appointmentDetails.isEmpty()) {
 				message = "No record found";
@@ -161,15 +161,6 @@ public class AppointmentController extends HttpServlet {
 			if(appointmentDetails.isEmpty()) {
 				message = "No record found";
 			}
-			for (AppointmentDetails appointment : appointmentDetails) {
-			    System.out.println("Appointment ID: " + appointment.getAppointmentId());
-			    System.out.println("Date: " + appointment.getDate());
-			    System.out.println("Time: " + appointment.getTime());
-			    System.out.println("Status: " + appointment.getStatus());
-			    System.out.println("Consultant Name: " + appointment.getConsultantName());
-			    System.out.println("Job Seeker Name: " + appointment.getJobSeekerName());
-			    System.out.println("-----------------------------------");
-			}
 
 		} 
 		catch (ClassNotFoundException | SQLException e) {
@@ -197,15 +188,6 @@ public class AppointmentController extends HttpServlet {
 			
 			if(appointmentDetails.isEmpty()) {
 				message = "No record found";
-			}
-			for (AppointmentDetails appointment : appointmentDetails) {
-			    System.out.println("Appointment ID: " + appointment.getAppointmentId());
-			    System.out.println("Date: " + appointment.getDate());
-			    System.out.println("Time: " + appointment.getTime());
-			    System.out.println("Status: " + appointment.getStatus());
-			    System.out.println("Consultant Name: " + appointment.getConsultantName());
-			    System.out.println("Job Seeker Name: " + appointment.getJobSeekerName());
-			    System.out.println("-----------------------------------");
 			}
 
 		} 

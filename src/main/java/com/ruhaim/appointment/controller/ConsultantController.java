@@ -11,9 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ruhaim.appointment.model.AppointmentDetails;
 import com.ruhaim.appointment.model.Consultant;
-import com.ruhaim.appointment.model.JobSeeker;
 import com.ruhaim.appointment.service.ConsultantService;
 
 
