@@ -132,15 +132,21 @@ public class ConsultantManagerImpl implements ConsultantManager {
 	}
 	
 	@Override
-	public List<Consultant> getAllConsultants() throws SQLException, ClassNotFoundException {
+	public List<Consultant> getAllConsultants(String job, String country) throws SQLException, ClassNotFoundException {
 		 Connection connection = getConnection();
 		    
-		    String query = "SELECT * FROM consultant";
-		    Statement st = connection.createStatement();
+		    String query = "SELECT * FROM consultant "
+		    		+ "WHERE (specialized_job = ? OR ? IS NULL) AND (specialized_country = ? OR ? IS NULL)";;
+		    
+		    PreparedStatement ps = connection.prepareStatement(query);
+			 ps.setString(1, job);       
+			 ps.setString(2, job);      
+			 ps.setString(3, country); 
+			 ps.setString(4, country); 
 		    
 		    List<Consultant> consultantsList = new ArrayList<>();
 		    
-		    ResultSet rs = st.executeQuery(query);
+		    ResultSet rs = ps.executeQuery();
 		    while (rs.next()) {
 		        Consultant consultant = new Consultant();
 		        consultant.setConsultantId(rs.getInt("consultant_id"));
@@ -153,7 +159,7 @@ public class ConsultantManagerImpl implements ConsultantManager {
 		        consultantsList.add(consultant);
 		    }
 		    
-		    st.close();
+		    ps.close();
 		    connection.close();
 		    
 		    return consultantsList;

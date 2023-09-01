@@ -36,8 +36,8 @@ public class AppointmentService {
 		return getAppointmentmanagerDao().bookAppointment(appointment, userId, availabilityTimeId);
 	}
 	
-	public List<AppointmentDetails> getAllJobSeekers() throws ClassNotFoundException, SQLException {
-		return getAppointmentmanagerDao().getAllAppointments();
+	public List<AppointmentDetails> getAllJobSeekers(String status) throws ClassNotFoundException, SQLException {
+		return getAppointmentmanagerDao().getAllAppointments(status);
 	}
 	
 	public List<AppointmentDetails> getAppointmentsByJobSeeker(int userId, String status) throws ClassNotFoundException, SQLException {

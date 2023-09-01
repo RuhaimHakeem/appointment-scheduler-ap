@@ -61,25 +61,31 @@
         <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
           <ul class="nav flex-column">
             <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="#">
+              <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="AdminDashboard.jsp">
                 <svg class="bi"><use xlink:href="#house-fill"/></svg>
                 Dashboard
               </a>
             </li>
+             <li class="nav-item">
+              <a class="nav-link d-flex align-items-center gap-2" href="AdminAddNewConsultant.jsp">
+                <svg class="bi"><use xlink:href="#file-earmark"/></svg>
+               Add New Consultant
+              </a>
+            </li>
             <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="#">
+              <a class="nav-link d-flex align-items-center gap-2" href="ConsultantManager">
                 <svg class="bi"><use xlink:href="#people"/></svg>
                Consultants
               </a>
             </li>
              <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="#">
+              <a class="nav-link d-flex align-items-center gap-2" href="JobSeekerManager">
                 <svg class="bi"><use xlink:href="#chevron-right"/></svg>
                 Job Seekers
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="#">
+              <a class="nav-link d-flex align-items-center gap-2" href="AppointmentManager">
                 <svg class="bi"><use xlink:href="#list"/></svg>
                 Appointments
               </a>
@@ -97,11 +103,15 @@
 
           <ul class="nav flex-column mb-auto">
            
-            <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="#">
+             <li class="nav-item">
+            <form action="UserManager" method="POST">
+     		<input type="hidden" name="role" value="admin"/>
+     		<input type="hidden" name="action" value="logout"/>
+              <button type="submit" style="border: none; background:none" class="nav-link d-flex align-items-center gap-2">
                 <svg class="bi"><use xlink:href="#door-closed"/></svg>
                 Sign out
-              </a>
+              </button>      
+              </form>
             </li>
           </ul>
         </div>

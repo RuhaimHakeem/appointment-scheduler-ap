@@ -65,19 +65,18 @@ public class ConsultantController extends HttpServlet {
 	    	 if(getConsultantService().registerConsultantWithId(regId)) {
 	    		 
 	    		message = "The Consultant registration id has been added successfully!";
-	    		System.out.println("added");
 	    		 
-			} 
+			}  else {
+				message = "operation failed! registration id already exists!";
+			}
 	    	   
 	     }
 	     catch (ClassNotFoundException | SQLException e) {
-				message = "registration id already exists!";
 		
 			}
 			
 	     request.getSession().setAttribute("feedbackMessage", message);
-//			RequestDispatcher rd = request.getRequestDispatcher("job-seeker-login.jsp");
-//			rd.forward(request, response);
+	     response.sendRedirect("AdminAddNewConsultant.jsp");
 	     
 		}
 	
@@ -127,6 +126,7 @@ public class ConsultantController extends HttpServlet {
 	private void deleteConsultant(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		clearMessage(); 
+	
 		
 		int consultantId = Integer.parseInt(request.getParameter("consultantId"));
 		
@@ -140,10 +140,10 @@ public class ConsultantController extends HttpServlet {
 			message = "operation failed! Unable to delete the consultant!";
 		}
 		
-		request.setAttribute("feebackMessage", message);
-	
 		
-//		response.sendRedirect("getproduct?actiontype=all");
+		request.getSession().setAttribute("feedbackMessage", message);
+		
+		response.sendRedirect("ConsultantManager");
 
 	}
 	
@@ -152,23 +152,16 @@ public class ConsultantController extends HttpServlet {
 		clearMessage(); 
 
 		List<Consultant> consultants = new ArrayList<>();
+		 String job = request.getParameter("job");
+	     String country = request.getParameter("country");
 		
 		try 
 		{
-			consultants = getConsultantService().getAllConsultants();
+			consultants = getConsultantService().getAllConsultants(job,country);
 			
 			if(consultants.isEmpty()) {
 				message = "No record found";
 			}		
-			for (Consultant consultant : consultants) {
-			    System.out.println("Consultant ID: " + consultant.getConsultantId());
-			    System.out.println("Name: " + consultant.getName());
-			    System.out.println("Email: " + consultant.getEmail());
-			    System.out.println("Specialized Job: " + consultant.getSpecializedJob());
-			    System.out.println("Specialized Country: " + consultant.getSpecializedCountry());
-			    System.out.println("User ID: " + consultant.getUserId());
-			    System.out.println("-----------------------------------");
-			}
 
 		} 
 		catch (ClassNotFoundException | SQLException e) {
@@ -179,8 +172,8 @@ public class ConsultantController extends HttpServlet {
 		request.setAttribute("consultants", consultants);
 		request.setAttribute("feebackMessage", message);
 		
-//		RequestDispatcher rd = request.getRequestDispatcher("superAdminViewAdmins.jsp");
-//    	rd.forward(request, response);
+		RequestDispatcher rd = request.getRequestDispatcher("AdminViewAllConsultants.jsp");
+    	rd.forward(request, response);
 
 	}
 	

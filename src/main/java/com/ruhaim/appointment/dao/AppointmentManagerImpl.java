@@ -77,26 +77,30 @@ public class AppointmentManagerImpl implements AppointmentManager {
        
 
 	@Override
-	public List<AppointmentDetails> getAllAppointments() throws SQLException, ClassNotFoundException {
+	public List<AppointmentDetails> getAllAppointments(String status) throws SQLException, ClassNotFoundException {
 		Connection connection = getConnection();
 		
 	    
 		 String query = "SELECT a.*, c.name AS consultant_name, j.name AS job_seeker_name " +
                  "FROM appointment a " +
                  "JOIN consultant c ON a.consultant_id = c.consultant_id " +
-                 "JOIN job_seeker j ON a.job_seeker_id = j.job_seeker_id";
+                 "JOIN job_seeker j ON a.job_seeker_id = j.job_seeker_id " +
+                 "WHERE (a.status = ? OR ? IS NULL)";
+                 
 		 
-	    Statement st = connection.createStatement();
+	    PreparedStatement ps = connection.prepareStatement(query);
+	    ps.setString(1, status);
+	    ps.setString(2, status);
 	    
 	    List<AppointmentDetails> appointmentDetailsList = new ArrayList<>();
 	    
-	    ResultSet rs = st.executeQuery(query);
+	    ResultSet rs = ps.executeQuery();
 	    while (rs.next()) {
 	        AppointmentDetails appointmentDetails = new AppointmentDetails(rs.getInt("appointment_id"), rs.getString("date"), rs.getString("time"), rs.getString("status"), rs.getString("consultant_name"), rs.getString("job_seeker_name")); 
 	        appointmentDetailsList.add(appointmentDetails);
 	    }
 	    
-	    st.close();
+	    ps.close();
 	    connection.close();
 	    
 	    return appointmentDetailsList;

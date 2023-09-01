@@ -12,12 +12,10 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.115.4">
-    <title>Consultant</title>
+    <title>Admin</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/dashboard/">
-    
-
-    
+   
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -109,17 +107,19 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
-<c:if test="${sessionScope.username != null && sessionScope.role == 'consultant'}">
+<script src="https://cdn.jsdelivr.net/npm/datepickerjs@1.13.0/dist/datepicker.full.min.js"></script>
+
+<c:if test="${sessionScope.username != null && sessionScope.role == 'admin'}">
 <jsp:include page="shared/navbar.jsp" />
 
 <div class="container-fluid">
   <div class="row">
  
     
-	<jsp:include page="shared/ConsultantSidebar.jsp" />
+	<jsp:include page="shared/AdminSidebar.jsp" />
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2" style="color:#424C49;">Consultant Dashboard</h1>
+        <h1 class="h2" style="color:#424C49;">Admin Dashboard</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group me-2">
             <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
@@ -131,20 +131,15 @@
           </button>
         </div>
       </div>
-     
-      
-      <c:set var="availabilityTimes" value="${availabilityTimes}" />
-      
-      <c:choose>
-    	<c:when test="${empty availabilityTimes}">
-         <div class="alert alert-warning" role="alert">
-  			No record found!
-	 	</div>
-    	</c:when>
-	</c:choose>
+
+      <section class="vh-100">
 	
 
-       <c:set var="isError" value="${fn:startsWith(sessionScope.feedbackMessage, 'operation')}" />
+
+    <div class="row d-flex justify-content-center h-100">
+      <div class="col-md-8 col-lg-6 col-xl-4">
+    	<h3 class="text-center mb-4" style="color:#424C49;">Add New Consultant</h3>
+         <c:set var="isError" value="${fn:startsWith(sessionScope.feedbackMessage, 'operation')}" />
 
     	<c:choose>
         <c:when test="${isError}">
@@ -165,74 +160,29 @@
         </c:when>
     	</c:choose>
 		<br/>
+         <form action="ConsultantManager" method="POST">
+          <!-- Username input -->
+          <div class="form-outline mb-4">
+            <input style="background: #F4F6F5" type="text" name="regId" id="regId" class="form-control form-control-lg"
+              placeholder="Enter registration ID" required />
+          </div>
+          
+            <input type="hidden" name="action" value="registerConsultantId"/>
 
-      <h4 style="color:#424C49;" class="mb-4 text-center">Availability Times</h4>
-     
-      <div class="table-responsive text-center">
-        
-        <table class="table table-striped">
-		  <thead class="thead-dark">
-		    <tr>
-		      <th scope="col">#</th>
-		      <th scope="col">Date</th>
-		      <th scope="col">Time</th>
-		      <th scope="col"></th>
-		    </tr>
-		  </thead>
-		  <tbody>
-		   <tag:forEach var="time" items="${availabilityTimes}">
-		    <tr>
-		      <th>${time.availabilityTimeId}</th>
-		      <td>${time.date}</td>
-		      <td>${time.time}</td>
-		      <td class="text-center">
-			
-				<button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                            data-target="#confirmationModal-${time.availabilityTimeId}">Delete</button>
-				  <div class="modal fade" id="confirmationModal-${time.availabilityTimeId}"
-                         aria-labelledby="confirmationModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="confirmationModalLabel">Confirm Deletion</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true"></span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    Are you sure you want to delete this availability time?
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                    <form action="AvailabilityManager" method="post" id="deleteForm-${time.availabilityTimeId}">
-                                        <input type="hidden" name="availabilityTimeId" value="${time.availabilityTimeId}">
-                                        <input type="hidden" name="action" value="deleteAvailability">
-                                        <button type="button" class="btn btn-danger" data-dismiss="modal"
-                                            onclick="submitDeleteForm('${time.availabilityTimeId}')">Delete</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>						
-			 </td>
-		    </tr>
-		    </tag:forEach>
-  		</tbody>
-	 </table>
+          <div class="text-center mt-4 pt-2">
+            <button type="submit" id="submit-btn" class="btn btn-primary btn-lg" style="background: #5C7066; border:none; width: 120px"
+              style="padding-left: 2.5rem; padding-right: 2.5rem;">Register</button>
+          </div>
 
-
+        </form>
       </div>
-    </main>
+    </div>
+
+</section>
+</main>
   </div>
 </div>
 </c:if> 
-<script>
-    
-    function submitDeleteForm(formId) {
-        document.getElementById("deleteForm-" + formId).submit();
-    }
-
-</script>
 </body>
 </html>
 

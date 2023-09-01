@@ -113,10 +113,11 @@ public class AppointmentController extends HttpServlet {
 	{
 
 		List<AppointmentDetails> appointmentDetails = new ArrayList<>();
+		String status = request.getParameter("status");
 		
 		try 
 		{
-			appointmentDetails = getAppointmentService().getAllJobSeekers();
+			appointmentDetails = getAppointmentService().getAllJobSeekers(status);
 			
 			if(appointmentDetails.isEmpty()) {
 				message = "No record found";
@@ -140,8 +141,8 @@ public class AppointmentController extends HttpServlet {
 		request.setAttribute("appointments", appointmentDetails);
 		request.setAttribute("feebackMessage", message);
 		
-//		RequestDispatcher rd = request.getRequestDispatcher("superAdminViewAdmins.jsp");
-//    	rd.forward(request, response);
+		RequestDispatcher rd = request.getRequestDispatcher("AdminViewAllAppointments.jsp");
+    	rd.forward(request, response);
 
 	}
 	
@@ -223,6 +224,7 @@ public class AppointmentController extends HttpServlet {
 	{
 		
 		int appointmentid = Integer.parseInt(request.getParameter("appointmentId"));
+		String role = request.getParameter("role"); 
 		
 		try {
 			if(getAppointmentService().deleteAppointment(appointmentid)) {
@@ -238,8 +240,17 @@ public class AppointmentController extends HttpServlet {
 		
 		HttpSession session = request.getSession();
 	    int userId = (int) session.getAttribute("userid");
+	    
+	    if(role != null) {
+	    	if(role.equals("admin")) {
+	    		response.sendRedirect("AppointmentManager");
+	    	}
+	    }
+	    else {
+	    	response.sendRedirect("AppointmentManager?action=appointmentsbyJobSeeker&userId=" + userId);
+	    }
 		
-		response.sendRedirect("AppointmentManager?action=appointmentsbyJobSeeker&userId=" + userId);
+		
 
 	}
 	

@@ -102,10 +102,9 @@ public class JobSeekerController extends HttpServlet {
 		}
 		
 		request.setAttribute("jobSeekers", jobSeekers);
-		request.getSession().setAttribute("feedbackMessage", message);
 		
-//		RequestDispatcher rd = request.getRequestDispatcher("superAdminViewAdmins.jsp");
-//    	rd.forward(request, response);
+		RequestDispatcher rd = request.getRequestDispatcher("AdminViewAllJobSeekers.jsp");
+    	rd.forward(request, response);
 
 	}
 	
@@ -120,18 +119,15 @@ public class JobSeekerController extends HttpServlet {
 				message = "The job seeker has been successfully deleted";
 			}
 			else {
-				message = "Failed to delete the job seeker!";
+				message = "operation failed! Unable to delete the job seeker!";
 			}
 		} 
 		catch (ClassNotFoundException | SQLException e) {
-			message = "operation failed! Unable to delete the job seeker!";
+
 		}
 		request.getSession().setAttribute("feedbackMessage", message);
 		
-
-	
-		
-//		response.sendRedirect("getproduct?actiontype=all");
+		response.sendRedirect("JobSeekerManager");
 
 	}
 	
