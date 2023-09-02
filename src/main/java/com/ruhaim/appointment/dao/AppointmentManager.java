@@ -13,6 +13,7 @@ public interface AppointmentManager {
 	public List<AppointmentDetails>getAllAppointments(String status) throws SQLException, ClassNotFoundException;	
 	public List<AppointmentDetails> getAppointmentsByJobSeeker(int userId, String status) throws SQLException, ClassNotFoundException;
 	public List<AppointmentDetails> getAppointmentsByConsultant(int userId, String status) throws SQLException, ClassNotFoundException;
+	public List<AppointmentDetails> getAppointmentsByConsultantAndJobSeeker(int consultantId, int jobSeekerid) throws SQLException, ClassNotFoundException;
 	public boolean updateAppointment(int appointmentId) throws SQLException, ClassNotFoundException;
 	public boolean deleteAppointment(int appointmentId) throws SQLException, ClassNotFoundException;
 }

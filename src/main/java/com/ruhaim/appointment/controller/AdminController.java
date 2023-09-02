@@ -53,9 +53,8 @@ public class AdminController extends HttpServlet {
     		totalConsultants(request,response);
     		totalJobSeekers(request,response);
     		getAllConsultants(request,response);
-    		getAppointmentsByConsultant(request, response);
+    		getAppointmentsByConsultantAndJobSeeker(request, response);
     		getAllJobSeekers(request,response);
-    		getAppointmentsByJobSeeker(request, response);
     		
     		RequestDispatcher rd = request.getRequestDispatcher("AdminReports.jsp");
         	rd.forward(request, response);
@@ -145,39 +144,6 @@ public class AdminController extends HttpServlet {
 
 	}
 	
-	private void getAppointmentsByConsultant(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
-	{
-		int userId = 0;
-		String userIdParam = request.getParameter("userId");
-
-		if (userIdParam != null && !userIdParam.isEmpty()) {
-		    userId = Integer.parseInt(userIdParam);
-		}
-		String status = request.getParameter("status"); 
-
-		List<AppointmentDetails> appointmentDetails = new ArrayList<>();
-		
-		try 
-		{
-			if(userId != 0) {
-				appointmentDetails = getAppointmentService().getAppointmentsByConsultant(userId, status);
-			}
-			else {
-				appointmentDetails = getAppointmentService().getAllAppointments(status);
-			}
-			
-			
-
-		} 
-		catch (ClassNotFoundException | SQLException | NumberFormatException  e) {
-			
-		}
-		
-		 request.setAttribute("appointments", appointmentDetails);
-
-
-	}
-	
 	private void getAllJobSeekers(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 
@@ -196,38 +162,36 @@ public class AdminController extends HttpServlet {
 		request.setAttribute("jobSeekers", jobSeekers);
 
 	}
+
 	
-
-	private void getAppointmentsByJobSeeker(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	private void getAppointmentsByConsultantAndJobSeeker(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		int consultantId = 0;
+		int jobSeekerId = 0;
 		
-		int userId = 0;
-		String userIdParam = request.getParameter("userId");
+		List<AppointmentDetails> appointmentDetails = new ArrayList<>();
+		String consultantIdParam = request.getParameter("consultantId");
+		String jobSeekerIdParam = request.getParameter("jobSeekerId");
 
-		if (userIdParam != null && !userIdParam.isEmpty()) {
-		    userId = Integer.parseInt(userIdParam);
+		if (consultantIdParam != null && !consultantIdParam.isEmpty()) {
+		    consultantId = Integer.parseInt(consultantIdParam);
 		}
 		
-		String status = request.getParameter("status"); 
-
-		List<AppointmentDetails> appointmentDetails = new ArrayList<>();
+		if (jobSeekerIdParam != null && !jobSeekerIdParam.isEmpty()) {
+		    jobSeekerId = Integer.parseInt(jobSeekerIdParam);
+		}
 		
 		try 
 		{
-			if(userId != 0) {
-				appointmentDetails = getAppointmentService().getAppointmentsByJobSeeker(userId, status);
-			}
-			else {
-				appointmentDetails = getAppointmentService().getAllAppointments(status);
-			}
-		
+			appointmentDetails = getAppointmentService().getAppointmentsByConsultantAndJobSeeker(consultantId, jobSeekerId);
 
 		} 
 		catch (ClassNotFoundException | SQLException e) {
+			
 		}
 		
-		 request.setAttribute("appointments", appointmentDetails);
-
+		request.setAttribute("appointments", appointmentDetails);
+	
 
 	}
 

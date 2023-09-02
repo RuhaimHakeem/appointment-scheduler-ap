@@ -184,42 +184,33 @@
       
        <form action="AdminManager" method="GET">
 		<div class="d-flex justify-content-center">
+		
 		<div class="form-outline mb-3 mr-4">
-		    <select class="form-select bg-light mr-4" style="color:#868e93; border-color:#D3D3D3; padding: 12px;" aria-label="Default select example" name="userId">
+		    <select class="form-select bg-light mr-4" style="color:#868e93; border-color:#D3D3D3; padding: 12px;" aria-label="Default select example" name="consultantId">
 		        <option value="" disabled selected>Select Consultant</option>
 		        <c:forEach var="consultant" items="${consultants}">
-		            <option value="${consultant.userId}">${consultant.name}</option>
+		            <option value="${consultant.consultantId}">${consultant.name}</option>
 		        </c:forEach>
 		    </select>
 		</div>
-		
-		</div>
-          <div class="text-center mt-4 pt-2">
-            <button type="submit" id="submit-btn" class="btn btn-primary btn-lg mb-4" style="background: #5C7066; border:none; width: 120px"
-              style="padding-left: 2.5rem; padding-right: 2.5rem;">Search</button>
-           
-          </div>
-        </form>
-        
-        
-       <form action="AdminManager" method="GET">
+         
 		<div class="d-flex justify-content-center">
 		<div class="form-outline mb-3">
-		    <select class="form-select bg-light mr-4" style="color:#868e93; border-color:#D3D3D3; padding: 12px;" aria-label="Default select example" name="userId">
+		    <select class="form-select bg-light mr-4" style="color:#868e93; border-color:#D3D3D3; padding: 12px;" aria-label="Default select example" name="jobSeekerId">
 		        <option value="" disabled selected>Select Job Seeker</option>
 		        <c:forEach var="jobSeeker" items="${jobSeekers}">
-		            <option value="${jobSeeker.userId}">${jobSeeker.name}</option>
+		            <option value="${jobSeeker.jobSeekerId}">${jobSeeker.name}</option>
 		        </c:forEach>
 		    </select>
 		</div>
 		
-			</div>
-          <div class="text-center mt-4 pt-2">
+		</div>
+       </div>
+        <div class="text-center mt-4 pt-2">
             <button type="submit" id="submit-btn" class="btn btn-primary btn-lg mb-4" style="background: #5C7066; border:none; width: 120px"
               style="padding-left: 2.5rem; padding-right: 2.5rem;">Search</button>
-           
           </div>
-        </form>
+       </form>
       </div>
       
         

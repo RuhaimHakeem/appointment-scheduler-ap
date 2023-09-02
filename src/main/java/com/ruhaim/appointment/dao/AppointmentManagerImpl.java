@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -157,6 +157,59 @@ public class AppointmentManagerImpl implements AppointmentManager {
 	    ps.setInt(1, consultantId);
 	    ps.setString(2, status);
 	    ps.setString(3, status);
+	    
+	    List<AppointmentDetails> appointmentDetailsList = new ArrayList<>();
+	    
+	    ResultSet rs = ps.executeQuery();
+	    while (rs.next()) {
+	        AppointmentDetails appointmentDetails = new AppointmentDetails(rs.getInt("appointment_id"), rs.getString("date"), rs.getString("time"), rs.getString("status"), rs.getString("consultant_name"), rs.getString("job_seeker_name")); 
+	        appointmentDetailsList.add(appointmentDetails);
+	    }
+	    
+	    ps.close();
+	    connection.close();
+	    
+	    return appointmentDetailsList;
+	}
+	
+	@Override
+	public List<AppointmentDetails> getAppointmentsByConsultantAndJobSeeker(int consultantId, int jobSeekerId) throws SQLException, ClassNotFoundException {
+		Connection connection = getConnection();
+		
+		Integer consultantIdInteger = null;
+		Integer jobSeekerIdInteger = null;
+		
+		if(consultantId != 0) {
+			consultantIdInteger = consultantId;
+		}
+		
+		if(jobSeekerId != 0) {
+			jobSeekerIdInteger = jobSeekerId;
+		}
+	
+	    
+		 String query = "SELECT a.*, c.name AS consultant_name, j.name AS job_seeker_name " +
+               "FROM appointment a " +
+               "JOIN consultant c ON a.consultant_id = c.consultant_id " +
+               "JOIN job_seeker j ON a.job_seeker_id = j.job_seeker_id " +
+               "WHERE( a.consultant_id = ? OR ? IS NULL) AND (a.job_seeker_id = ? OR ? IS NULL)";
+		 
+
+	    PreparedStatement ps = connection.prepareStatement(query);
+	    if (consultantIdInteger != null) {
+	        ps.setInt(1, consultantIdInteger);
+	        ps.setInt(2, consultantIdInteger);
+	    } else {
+	        ps.setNull(1, Types.INTEGER);
+	        ps.setNull(2, Types.INTEGER);
+	    }
+	    if (jobSeekerIdInteger != null) {
+	        ps.setInt(3, jobSeekerIdInteger);
+	        ps.setInt(4, jobSeekerIdInteger);
+	    } else {
+	        ps.setNull(3, Types.INTEGER);
+	        ps.setNull(4, Types.INTEGER);
+	    }
 	    
 	    List<AppointmentDetails> appointmentDetailsList = new ArrayList<>();
 	    
