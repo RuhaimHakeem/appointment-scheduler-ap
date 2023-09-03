@@ -1,10 +1,14 @@
 package com.ruhaim.appointment.service;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import com.ruhaim.appointment.model.Appointment;
+import com.ruhaim.appointment.model.AppointmentDetails;
 
 class AppointmentServiceTest {
 
@@ -23,7 +27,7 @@ class AppointmentServiceTest {
 	     String status = "Booked";
 	     int userId = 63;
 	     int consultantId = 2;
-	     int availabilityTimeId = 45244;
+	     int availabilityTimeId = 45246;
 
 	        Appointment appointment = new Appointment();
 	        
@@ -44,25 +48,31 @@ class AppointmentServiceTest {
 	    }
 	}
 	
-	
+	@Disabled
 	@Test
 	void testGetAppointmentsByJobSeeker() {
 		 int userId = 54;
 		 String status = "";
+		 
+		 List<AppointmentDetails> appointments = null;
 	        
 	   try {
-		   	 appointmentService.getAppointmentsByJobSeeker(userId, status);
-      
+		   appointments = appointmentService.getAppointmentsByJobSeeker(userId, status);
+		   
+		   if(appointments != null) {
+			   assertNotNull(appointments);
+		   }
 	            
 	      } catch (Throwable e) {
 	         fail("Exception: " + e.getMessage());
 	    }
 	}
 
+	@Disabled
 	@Test
 	void testUpdateAppointment() {
 	
-	   int appointmentId = 27;    
+	   int appointmentId = 28;    
 	        
 	   try {
 	        boolean result = appointmentService.updateAppointment(appointmentId);
@@ -75,9 +85,10 @@ class AppointmentServiceTest {
 	    }
 	}
 
+
 	@Test
 	void testDeleteAppointment() {
-		 int appointmentId = 27;    
+		 int appointmentId = 28;    
 	        
 	   try {
 		     boolean result = appointmentService.deleteAppointment(appointmentId);

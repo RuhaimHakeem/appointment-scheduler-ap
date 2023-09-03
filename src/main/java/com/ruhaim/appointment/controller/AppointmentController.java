@@ -1,11 +1,15 @@
 package com.ruhaim.appointment.controller;
 import com.ruhaim.appointment.model.AppointmentDetails;
+import com.ruhaim.appointment.model.JobSeeker;
+import com.ruhaim.appointment.model.Consultant;
+import com.ruhaim.appointment.model.Email;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.mail.MessagingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,8 +17,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.ruhaim.appointment.dao.helpers.Helpers;
 import com.ruhaim.appointment.model.Appointment;
 import com.ruhaim.appointment.service.AppointmentService;
+import com.ruhaim.appointment.service.EmailService;
 
 
 public class AppointmentController extends HttpServlet {
@@ -54,7 +60,11 @@ public class AppointmentController extends HttpServlet {
 		String action = request.getParameter("action");
 		
 		if(action.equals("bookAppointment")) {
-			bookAppointment(request, response);
+			try {
+				bookAppointment(request, response);
+			} catch (ServletException | IOException | MessagingException | ClassNotFoundException | SQLException e) {
+				e.printStackTrace();
+			}
 		} else if (action.equals("deleteAppointment")) {
 			deleteAppointment(request, response);
 		} else if(action.equals("completeAppointment")) {
@@ -63,7 +73,7 @@ public class AppointmentController extends HttpServlet {
 
 	}
 	
-	private void bookAppointment(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	private void bookAppointment(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, MessagingException, ClassNotFoundException, SQLException {
 		
 		 
 		 String date = request.getParameter("date");
@@ -72,13 +82,6 @@ public class AppointmentController extends HttpServlet {
 	     int userId = Integer.parseInt(request.getParameter("userId")); 
 	     int consultantId = Integer.parseInt(request.getParameter("consultantId")); 
 	     int availabilityTimeId = Integer.parseInt(request.getParameter("availabilityTimeId")); 
-	     
-	     System.out.println(date);
-	     System.out.println(time);
-	     System.out.println(status);
-	     System.out.println(userId);
-	     System.out.println(consultantId);
-	     System.out.println(availabilityTimeId);
 	   
 	     
 	     Appointment appointment = new Appointment();
@@ -86,13 +89,20 @@ public class AppointmentController extends HttpServlet {
 	     appointment.setTime(time);
 	     appointment.setStatus(status);
 	     appointment.setConsultantId(consultantId);
+	     
+	     JobSeeker jobSeeker = Helpers.fetchJobSeekerById(userId);
+	     Consultant consultant = Helpers.fetchConsultantById(consultantId);
+	     
+	     Email email = new Email(jobSeeker.getName(), consultant.getName(), jobSeeker.getName(), jobSeeker.getEmail(), date, time);
 	    
+	     EmailService service = new EmailService();
 	    
 	     
 	     try {
 	    	 
 	    	 if(getAppointmentService().bookAppointment(appointment, userId, availabilityTimeId)) {
 	    		 
+	 			 service.send(email);
 	    		 message = "The Appointment has been booked successfully!";
 	    	
 			} else {
