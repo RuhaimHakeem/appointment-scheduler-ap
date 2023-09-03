@@ -163,12 +163,12 @@ public class ConsultantAvailabilityTimeManagerImpl implements ConsultantAvailabi
 	
 	    
 	    List<AvailabilityTime> availabilityTimes = new ArrayList<>();
+	   
 	    
 	    ResultSet rs = ps.executeQuery();
 	    while (rs.next()) {
 	    	AvailabilityTime availabilityTime = new AvailabilityTime(); 
 
-//	        availabilityTime.setName(rs.getString("consultant_name"));
 	    	availabilityTime.setAvailabilityTimeId(rs.getInt("availability_time_id"));
 	        availabilityTime.setDate(rs.getString("date"));
 	        availabilityTime.setTime(rs.getString("time"));

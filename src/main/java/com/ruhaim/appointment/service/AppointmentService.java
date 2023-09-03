@@ -14,7 +14,7 @@ public class AppointmentService {
 	private static AppointmentService appointmentServiceObj;
 
 	public AppointmentService() {
-		// TODO Auto-generated constructor stub
+
 	}
 	
 	public synchronized static AppointmentService getAppointmentService() {
