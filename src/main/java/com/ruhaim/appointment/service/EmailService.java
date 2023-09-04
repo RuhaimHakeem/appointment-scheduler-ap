@@ -15,7 +15,7 @@ import com.ruhaim.appointment.model.Email;
 
 public class EmailService {
 	
-	public void send(Email email) throws MessagingException
+	public boolean send(Email email) throws MessagingException
 	{
 	
 
@@ -48,6 +48,8 @@ public class EmailService {
 		Message message = prepareMessage(session, myEmail, recipientEmail, jobSeekerName, consultantName, recipientName, date, time);
 		
 		Transport.send(message);
+		
+		return true;
 	}
 	
 	public static Message prepareMessage(Session session, String myEmail, String recipientEmail,  String jobSeekerName, String consultantName, String recipientName, String date, String time)

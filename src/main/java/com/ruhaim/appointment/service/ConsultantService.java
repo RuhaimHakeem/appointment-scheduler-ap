@@ -46,5 +46,9 @@ public synchronized static ConsultantService getConsultantService() {
 	public List<Consultant> getAllConsultants(String job, String country) throws ClassNotFoundException, SQLException {
 		return getConsultantManagerDao().getAllConsultants(job, country);
 	}
+	
+	public Consultant getConsultantById(int userId) throws ClassNotFoundException, SQLException {
+		return getConsultantManagerDao().getConsultantById(userId);
+	}
 
 }

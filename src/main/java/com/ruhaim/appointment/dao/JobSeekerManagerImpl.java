@@ -96,6 +96,28 @@ public class JobSeekerManagerImpl implements JobSeekerManager {
 		    
 		    return jobSeekerList;
 	}
+	
+	@Override
+	public JobSeeker getJobSeekerById(int userId) throws SQLException, ClassNotFoundException {
+		Connection connection = getConnection();
+	
+	   String query = "SELECT * FROM job_seeker WHERE user_id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, userId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                	 JobSeeker jobSeeker = new JobSeeker();
+                     jobSeeker.setUserId(rs.getInt("user_id"));
+                     jobSeeker.setName(rs.getString("name"));
+                     jobSeeker.setEmail(rs.getString("email"));
+                     
+                     return jobSeeker;
+                }
+                
+                throw new SQLException("No job seeker found for user ID: " + userId);
+            }
+        }
+}
 
 
 

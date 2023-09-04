@@ -164,5 +164,27 @@ public class ConsultantManagerImpl implements ConsultantManager {
 		    
 		    return consultantsList;
 	}
+	
+	@Override
+	public Consultant getConsultantById(int userId) throws SQLException, ClassNotFoundException {
+		Connection connection = getConnection();
+	
+	   String query = "SELECT * FROM consultant WHERE consultant_id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, userId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                	 Consultant consultant = new Consultant();
+                	 consultant.setUserId(rs.getInt("user_id"));
+                	 consultant.setName(rs.getString("name"));
+                	 consultant.setEmail(rs.getString("email"));
+                     
+                     return consultant;
+                }
+                
+                throw new SQLException("No consultant found for user ID: " + userId);
+            }
+        }
+}
 
 }

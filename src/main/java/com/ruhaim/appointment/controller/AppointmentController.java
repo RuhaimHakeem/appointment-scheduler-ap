@@ -17,10 +17,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.ruhaim.appointment.dao.helpers.Helpers;
 import com.ruhaim.appointment.model.Appointment;
 import com.ruhaim.appointment.service.AppointmentService;
+import com.ruhaim.appointment.service.ConsultantService;
 import com.ruhaim.appointment.service.EmailService;
+import com.ruhaim.appointment.service.JobSeekerService;
 
 
 public class AppointmentController extends HttpServlet {
@@ -30,7 +31,15 @@ public class AppointmentController extends HttpServlet {
 	
 	 private AppointmentService getAppointmentService() {
 			return AppointmentService.getAppointmentService();
-		}
+	}
+	
+	 private JobSeekerService getJobSeekerService() {
+			return JobSeekerService.getJobSeekerService();
+	}
+	 
+	 private ConsultantService getConsultantService() {
+			return ConsultantService.getConsultantService();
+	}
 
     public AppointmentController() {
       
@@ -62,7 +71,7 @@ public class AppointmentController extends HttpServlet {
 		if(action.equals("bookAppointment")) {
 			try {
 				bookAppointment(request, response);
-			} catch (ServletException | IOException | MessagingException | ClassNotFoundException | SQLException e) {
+			} catch (ServletException | IOException| ClassNotFoundException | SQLException | MessagingException e) {
 				e.printStackTrace();
 			}
 		} else if (action.equals("deleteAppointment")) {
@@ -73,7 +82,7 @@ public class AppointmentController extends HttpServlet {
 
 	}
 	
-	private void bookAppointment(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, MessagingException, ClassNotFoundException, SQLException {
+	private void bookAppointment(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ClassNotFoundException, SQLException, MessagingException {
 		
 		 
 		 String date = request.getParameter("date");
@@ -89,20 +98,15 @@ public class AppointmentController extends HttpServlet {
 	     appointment.setTime(time);
 	     appointment.setStatus(status);
 	     appointment.setConsultantId(consultantId);
-	     
-	     JobSeeker jobSeeker = Helpers.fetchJobSeekerById(userId);
-	     Consultant consultant = Helpers.fetchConsultantById(consultantId);
-	     
-	     Email email = new Email(jobSeeker.getName(), consultant.getName(), jobSeeker.getName(), jobSeeker.getEmail(), date, time);
 	    
-	     EmailService service = new EmailService();
 	    
 	     
 	     try {
 	    	 
 	    	 if(getAppointmentService().bookAppointment(appointment, userId, availabilityTimeId)) {
 	    		 
-	 			 service.send(email);
+	 			 sendEmail(userId, consultantId, date, time);
+	 			 
 	    		 message = "The Appointment has been booked successfully!";
 	    	
 			} else {
@@ -131,15 +135,6 @@ public class AppointmentController extends HttpServlet {
 			
 			if(appointmentDetails.isEmpty()) {
 				message = "No record found";
-			}
-			for (AppointmentDetails appointment : appointmentDetails) {
-			    System.out.println("Appointment ID: " + appointment.getAppointmentId());
-			    System.out.println("Date: " + appointment.getDate());
-			    System.out.println("Time: " + appointment.getTime());
-			    System.out.println("Status: " + appointment.getStatus());
-			    System.out.println("Consultant Name: " + appointment.getConsultantName());
-			    System.out.println("Job Seeker Name: " + appointment.getJobSeekerName());
-			    System.out.println("-----------------------------------");
 			}
 
 		} 
@@ -270,6 +265,20 @@ public class AppointmentController extends HttpServlet {
 			
 		 response.sendRedirect("AppointmentManager?action=appointmentsByConsultant&userId=" + userId);
 		
+	}
+	
+	private void sendEmail(int userId, int consultantId, String date, String time) throws ClassNotFoundException, SQLException, MessagingException {
+		 JobSeeker jobSeeker = getJobSeekerService().getJobSeekerById(userId);
+	     Consultant consultant = getConsultantService().getConsultantById(consultantId);
+	     
+	     Email mailJobSeeker = new Email(jobSeeker.getName(), consultant.getName(), jobSeeker.getName(), jobSeeker.getEmail(), date, time);
+	     
+	     Email mailConsultant = new Email(jobSeeker.getName(), consultant.getName(), consultant.getName(), consultant.getEmail(), date, time);
+	    
+	     EmailService mailService = new EmailService();
+	     
+	     mailService.send(mailConsultant);
+	     mailService.send(mailJobSeeker);
 	}
 	
 

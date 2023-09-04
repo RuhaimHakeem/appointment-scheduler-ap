@@ -10,5 +10,6 @@ public interface ConsultantManager {
 	public boolean registerConsultant(Consultant consultant, int regId) throws SQLException, ClassNotFoundException;
 	public boolean deleteConsultant(int consultantId) throws SQLException, ClassNotFoundException;
 	List<Consultant> getAllConsultants(String job, String country) throws SQLException, ClassNotFoundException;
+	public Consultant getConsultantById(int userId) throws SQLException, ClassNotFoundException;
 	
 }

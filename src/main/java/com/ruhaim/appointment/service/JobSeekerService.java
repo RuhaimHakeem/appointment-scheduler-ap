@@ -41,6 +41,10 @@ public class JobSeekerService {
 	public boolean deleteJobSeeker(int jobSeekerid) throws ClassNotFoundException, SQLException {
 		return getJobSeekerManagerDao().deleteJobSeeker(jobSeekerid);
 	}
+	
+	public JobSeeker getJobSeekerById(int userId) throws ClassNotFoundException, SQLException {
+		return getJobSeekerManagerDao().getJobSeekerById(userId);
+	}
 
 	
 }
