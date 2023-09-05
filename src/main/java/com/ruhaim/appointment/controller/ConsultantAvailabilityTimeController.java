@@ -4,14 +4,12 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import com.ruhaim.appointment.model.AvailabilityTime;
 import com.ruhaim.appointment.service.ConsultantAvailabilityTimeService;
 
@@ -100,17 +98,6 @@ public class ConsultantAvailabilityTimeController extends HttpServlet {
 			if(availabilityTimes.isEmpty()) {
 				message = "No record found";
 			}
-			
-			for (AvailabilityTime availabilityTime : availabilityTimes) { 
-				System.out.println("Consultant Id: " + availabilityTime.getConsultantId());
-			    System.out.println("Availability Date: " + availabilityTime.getDate());
-			    System.out.println("Time: " + availabilityTime.getTime());
-			    System.out.println("Name: " + availabilityTime.getName());
-			    System.out.println("Country: " + availabilityTime.getSpecializedCountry());
-			    System.out.println("Job: " + availabilityTime.getSpecializedJob());
-			    System.out.println("Email: " + availabilityTime.getEmail());
-			    System.out.println("-----------------------------------");
-			}
 
 		} 
 		catch (ClassNotFoundException | SQLException e) {
@@ -169,7 +156,6 @@ public class ConsultantAvailabilityTimeController extends HttpServlet {
 
 		catch (ClassNotFoundException | SQLException e) {
 			message = e.getMessage();
-			System.out.println(e.getMessage());
 		
 		}
 		

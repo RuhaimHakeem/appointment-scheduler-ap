@@ -25,7 +25,7 @@ public class UserManagerImpl implements UserManager {
 
 	@Override
 	public User login(String username, String password, String role) throws ClassNotFoundException, SQLException {
-		// TODO Auto-generated method stub
+
 			Connection connection = getConnection();
 				
 				
@@ -50,13 +50,7 @@ public class UserManagerImpl implements UserManager {
 							user.setUserName(rs.getString("username"));
 							user.setRole(rs.getString("role"));
 
-						}
-						
-						else
-						{
-							
-						}
-							
+						}		
 						 
 					}
 					statement.close();

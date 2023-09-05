@@ -93,7 +93,7 @@
 			</div>
 				
 			 <div class="form-outline mb-3">
-            <input style="background: #F4F6F5" type="text" id="regId" name="regId" class="form-control form-control-lg"
+            <input style="background: #F4F6F5" type="number" id="regId" name="regId" class="form-control form-control-lg"
               placeholder="Enter registration id" required />
           </div>
           

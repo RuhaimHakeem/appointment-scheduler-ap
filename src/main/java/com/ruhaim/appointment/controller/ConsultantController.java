@@ -164,7 +164,6 @@ public class ConsultantController extends HttpServlet {
 		} 
 		catch (ClassNotFoundException | SQLException e) {
 			message = e.getMessage();
-			 System.out.println(e.getMessage());
 		}
 		
 		request.setAttribute("consultants", consultants);

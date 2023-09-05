@@ -1,11 +1,8 @@
 package com.ruhaim.appointment.controller;
 import com.ruhaim.appointment.model.User;
 import com.ruhaim.appointment.service.UserService;
-
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.sql.SQLException;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -26,7 +23,6 @@ public class UserController extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-//		login(request, response);
 	}
 
 
@@ -66,7 +62,7 @@ public class UserController extends HttpServlet {
 			
 		} 
 		catch (ClassNotFoundException | SQLException e) {
-			 System.out.println("Successfully received " + e.getMessage());
+			
 		}
 		
 

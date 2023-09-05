@@ -19,9 +19,6 @@ import com.ruhaim.appointment.service.ConsultantService;
 import com.ruhaim.appointment.service.JobSeekerService;
 
 
-/**
- * Servlet implementation class AdminController
- */
 public class AdminController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -88,8 +85,6 @@ public class AdminController extends HttpServlet {
 		int count = 0;
 		
 		count = getAdminService().totalAppointmentsThisMonth();	
-		
-		System.out.println(count);
 		
 		request.setAttribute("totalAppointmentsThisMonth", count);
 		

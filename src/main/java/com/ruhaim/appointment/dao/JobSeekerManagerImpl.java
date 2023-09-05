@@ -22,7 +22,7 @@ public class JobSeekerManagerImpl implements JobSeekerManager {
 	}
 
 	public JobSeekerManagerImpl() {
-		// TODO Auto-generated constructor stub
+
 	}
 	
 	@Override

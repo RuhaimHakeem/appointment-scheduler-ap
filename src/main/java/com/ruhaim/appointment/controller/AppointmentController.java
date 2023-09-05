@@ -3,12 +3,10 @@ import com.ruhaim.appointment.model.AppointmentDetails;
 import com.ruhaim.appointment.model.JobSeeker;
 import com.ruhaim.appointment.model.Consultant;
 import com.ruhaim.appointment.model.Email;
-
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.mail.MessagingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,7 +14,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import com.ruhaim.appointment.model.Appointment;
 import com.ruhaim.appointment.service.AppointmentService;
 import com.ruhaim.appointment.service.ConsultantService;
@@ -139,7 +136,6 @@ public class AppointmentController extends HttpServlet {
 
 		} 
 		catch (ClassNotFoundException | SQLException e) {
-			 System.out.println(e.getMessage());
 			message = e.getMessage();
 		}
 		
