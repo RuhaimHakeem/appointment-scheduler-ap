@@ -88,7 +88,7 @@ class AppointmentServiceTest {
 
 	@Test
 	void testDeleteAppointment() {
-		 int appointmentId = 28;    
+		 int appointmentId = 25;    
 	        
 	   try {
 		     boolean result = appointmentService.deleteAppointment(appointmentId);

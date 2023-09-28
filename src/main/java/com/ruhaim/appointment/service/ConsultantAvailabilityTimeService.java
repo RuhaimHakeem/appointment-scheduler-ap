@@ -9,7 +9,11 @@ public class ConsultantAvailabilityTimeService {
 	
 	private static ConsultantAvailabilityTimeService consultantAvailabilityTimeServiceObj;
 	
-public synchronized static ConsultantAvailabilityTimeService getConsultantAvailabilityTimeService() {
+	private ConsultantAvailabilityTimeService() {
+
+	}
+	
+	public synchronized static ConsultantAvailabilityTimeService getConsultantAvailabilityTimeService() {
 		
 		if(consultantAvailabilityTimeServiceObj == null) {
 			consultantAvailabilityTimeServiceObj = new ConsultantAvailabilityTimeService();

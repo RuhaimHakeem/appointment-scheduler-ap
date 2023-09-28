@@ -10,7 +10,7 @@ public class UserService {
 	
 	private static UserService userServiceObj;
 
-	public UserService() {
+	private UserService() {
 		
 	}
 	

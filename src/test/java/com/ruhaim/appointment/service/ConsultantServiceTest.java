@@ -139,9 +139,10 @@ class ConsultantServiceTest {
 	void testGetAllConsultants() {
 		 String job = "";
 		 String country = "";
+		 
 	        
 	   try {
-	        consultantService.getAllConsultants(job,country);
+		  consultantService.getAllConsultants(job,country);
       
 	            
 	      } catch (Throwable e) {

@@ -112,7 +112,7 @@ public class UserController extends HttpServlet {
         session.invalidate();
         
         if(role.equals("admin") ) {
-			 rd = request.getRequestDispatcher("AdminLogin.jsp");
+			rd = request.getRequestDispatcher("AdminLogin.jsp");
 		} else if(role.equals("job_seeker")) {
 			rd = request.getRequestDispatcher("JobSeekerLogin.jsp");
 		} else if (role.equals("consultant")) {

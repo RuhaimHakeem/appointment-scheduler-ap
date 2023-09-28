@@ -13,7 +13,7 @@ public class AppointmentService {
 	
 	private static AppointmentService appointmentServiceObj;
 
-	public AppointmentService() {
+	private AppointmentService() {
 
 	}
 	

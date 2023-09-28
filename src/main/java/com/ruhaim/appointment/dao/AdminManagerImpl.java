@@ -29,10 +29,12 @@ public class AdminManagerImpl implements AdminManager {
 	    Calendar endDate = Calendar.getInstance();
 
 	    calendar.add(Calendar.DAY_OF_YEAR, -7);
+	    endDate.add(Calendar.DAY_OF_YEAR, 1);
 
 	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	    String startDateStr = dateFormat.format(calendar.getTime());
 	    String endDateStr = dateFormat.format(endDate.getTime());
+	    
 
 	    String query = "SELECT COUNT(*) AS total_appointments " +
 	                   "FROM appointment " +
@@ -52,6 +54,7 @@ public class AdminManagerImpl implements AdminManager {
 	    rs.close();
 	    ps.close();
 	    connection.close();
+	    
 
 	    return totalAppointments;
 	}
@@ -65,6 +68,7 @@ public class AdminManagerImpl implements AdminManager {
 	    Calendar endDate = Calendar.getInstance();
 
 	    calendar.add(Calendar.DAY_OF_YEAR, -30);
+	    endDate.add(Calendar.DAY_OF_YEAR, 1);
 
 	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	    String startDateStr = dateFormat.format(calendar.getTime());

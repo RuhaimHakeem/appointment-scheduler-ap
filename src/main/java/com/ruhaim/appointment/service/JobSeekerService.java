@@ -11,7 +11,7 @@ public class JobSeekerService {
 	
 	private static JobSeekerService jobSeekerServiceObj;
 
-	public JobSeekerService() {
+	private JobSeekerService() {
 		
 	}
 	

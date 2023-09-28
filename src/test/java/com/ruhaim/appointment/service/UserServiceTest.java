@@ -22,7 +22,7 @@ public class UserServiceTest {
         String username = "John";
         String password = "9090";
         String role = "job_seeker";
-        
+       
         
         try {
             User user = userService.login(username, password, role);

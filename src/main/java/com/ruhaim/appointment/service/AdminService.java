@@ -11,7 +11,7 @@ public class AdminService {
 	
 	private static AdminService adminServiceObj;
 
-	public AdminService() {
+	private AdminService() {
 
 	}
 	

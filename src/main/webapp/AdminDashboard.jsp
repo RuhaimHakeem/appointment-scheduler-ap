@@ -132,7 +132,6 @@
       <h3 class="h4" style="color:#424C49;">User Name: ${sessionScope.username}</h3>
       <h3 class="h4" style="color:#424C49;">User Id: ${sessionScope.userid}</h3>  
       </div>
-
       
     </main>
   </div>

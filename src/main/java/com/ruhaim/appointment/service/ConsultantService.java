@@ -12,7 +12,7 @@ public class ConsultantService {
 	
 	private static ConsultantService consultantServiceObj;
 
-	public ConsultantService() {
+	private ConsultantService() {
 	}
 	
 public synchronized static ConsultantService getConsultantService() {
